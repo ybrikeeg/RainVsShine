@@ -16,7 +16,7 @@
 		420E77A8199EE1DF00DEBBD0 /* AttributorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77A7199EE1DF00DEBBD0 /* AttributorAppDelegate.m */; };
 		420E77AB199EE1DF00DEBBD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 420E77A9199EE1DF00DEBBD0 /* Main.storyboard */; };
 		420E77AE199EE1DF00DEBBD0 /* AttributorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */; };
-		420E77B1199EE1DF00DEBBD0 /* AttributorMyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77B0199EE1DF00DEBBD0 /* AttributorMyScene.m */; };
+		420E77B1199EE1DF00DEBBD0 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77B0199EE1DF00DEBBD0 /* GameScene.m */; };
 		420E77B3199EE1DF00DEBBD0 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 420E77B2199EE1DF00DEBBD0 /* Spaceship.png */; };
 		420E77B5199EE1DF00DEBBD0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 420E77B4199EE1DF00DEBBD0 /* Images.xcassets */; };
 		420E77BC199EE1DF00DEBBD0 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E77BB199EE1DF00DEBBD0 /* XCTest.framework */; };
@@ -51,8 +51,8 @@
 		420E77AA199EE1DF00DEBBD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		420E77AC199EE1DF00DEBBD0 /* AttributorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributorViewController.h; sourceTree = "<group>"; };
 		420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributorViewController.m; sourceTree = "<group>"; };
-		420E77AF199EE1DF00DEBBD0 /* AttributorMyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributorMyScene.h; sourceTree = "<group>"; };
-		420E77B0199EE1DF00DEBBD0 /* AttributorMyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributorMyScene.m; sourceTree = "<group>"; };
+		420E77AF199EE1DF00DEBBD0 /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		420E77B0199EE1DF00DEBBD0 /* GameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
 		420E77B2199EE1DF00DEBBD0 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		420E77B4199EE1DF00DEBBD0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		420E77BA199EE1DF00DEBBD0 /* RainVsShineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RainVsShineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,8 +126,8 @@
 				420E77A9199EE1DF00DEBBD0 /* Main.storyboard */,
 				420E77AC199EE1DF00DEBBD0 /* AttributorViewController.h */,
 				420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */,
-				420E77AF199EE1DF00DEBBD0 /* AttributorMyScene.h */,
-				420E77B0199EE1DF00DEBBD0 /* AttributorMyScene.m */,
+				420E77AF199EE1DF00DEBBD0 /* GameScene.h */,
+				420E77B0199EE1DF00DEBBD0 /* GameScene.m */,
 				420E77B2199EE1DF00DEBBD0 /* Spaceship.png */,
 				420E77B4199EE1DF00DEBBD0 /* Images.xcassets */,
 				420E779E199EE1DF00DEBBD0 /* Supporting Files */,
@@ -265,7 +265,7 @@
 			files = (
 				420E77A8199EE1DF00DEBBD0 /* AttributorAppDelegate.m in Sources */,
 				420E77AE199EE1DF00DEBBD0 /* AttributorViewController.m in Sources */,
-				420E77B1199EE1DF00DEBBD0 /* AttributorMyScene.m in Sources */,
+				420E77B1199EE1DF00DEBBD0 /* GameScene.m in Sources */,
 				420E77A4199EE1DF00DEBBD0 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
