@@ -7,6 +7,8 @@
 //
 
 #import "GameScene.h"
+#import "Rain.h"
+#import "Constants.h"
 
 #define STATUS_BAR_HEIGHT 20
 #define CLOUD_X_OFFSET 50
@@ -17,10 +19,6 @@
 @end
 
 @implementation GameScene
-
-static const int rainCategory = 1 << 0;
-static const int cloudHitCategory = 1 << 1;
-static const int floorCategory = 1 << 2;
 
 -(id)initWithSize:(CGSize)size {
    if (self = [super initWithSize:size]) {
@@ -41,7 +39,7 @@ static const int floorCategory = 1 << 2;
       roof.physicsBody.contactTestBitMask = rainCategory;
       roof.physicsBody.collisionBitMask = rainCategory;
       [self addChild:roof];
-      
+
    }
    return self;
 }
@@ -61,20 +59,15 @@ static const int floorCategory = 1 << 2;
    SKAction *rainSequence = [SKAction sequence:@[rainPerformSelector, rainWait]];
    SKAction *rainRepeat   = [SKAction repeatActionForever:rainSequence];
    [self runAction:rainRepeat];
-   
 }
 
 - (void)createRain
 {
-   NSLog(@"rain: %d", [self.rainArray count]);
-   SKSpriteNode *rain = [SKSpriteNode spriteNodeWithImageNamed:@"rain"];
+  // NSLog(@"rain: %d", [self.rainArray count]);
+   Rain *rain = [[Rain alloc] initWithStyle:kRainStyleNormal];
    rain.position = CGPointMake(rain.frame.size.width/2 + arc4random()%300, self.frame.size.height + RAIN_Y_OFFSET);
-   rain.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:rain.frame.size];
-   rain.physicsBody.categoryBitMask = rainCategory;
-   rain.physicsBody.contactTestBitMask = cloudHitCategory | floorCategory;
-   rain.physicsBody.collisionBitMask = floorCategory;
    [self addChild:rain];
-   
+
    [self.rainArray addObject:rain];
 }
 
@@ -87,11 +80,12 @@ static const int floorCategory = 1 << 2;
    cloud.physicsBody.categoryBitMask = cloudHitCategory;
    cloud.physicsBody.contactTestBitMask = rainCategory;
    cloud.physicsBody.collisionBitMask =  0;
+   cloud.zPosition = 2.0f;
    [self addChild:cloud];
    
    [self.cloudArray addObject:cloud];
    
-   SKAction *move = [SKAction moveToX:self.view.bounds.size.width duration:arc4random()%100 / 100 + 3.0];
+   SKAction *move = [SKAction moveToX:self.view.bounds.size.width + cloud.frame.size.width duration:arc4random()%100 / 100 + 3.0];
    [cloud runAction:move completion:^{
       [self.cloudArray removeObject:cloud];
       [cloud removeFromParent];
@@ -115,19 +109,43 @@ static const int floorCategory = 1 << 2;
    SKAction *move = [SKAction moveTo:cloud.position duration:.1f];
    [drop runAction:move completion:^{
       [self removeRain:drop];
+      
+      int specialRain = arc4random()%3;
+      NSLog(@"Special: %d", specialRain);
+      
+      //double rain
+      if (specialRain == 0){
+         Rain *rain = [[Rain alloc] initWithStyle:kRainStylePair];
+         rain.position = CGPointMake(cloud.position.x, cloud.position.y);
+         [self addChild:rain];
+         [self.rainArray addObject:rain];
+         
+      } else if (specialRain == 1){
+         //big rain
+         Rain *rain = [[Rain alloc] initWithStyle:kRainStyleLarge];
+         rain.position = CGPointMake(cloud.position.x, cloud.position.y);
+         [self addChild:rain];
+         [self.rainArray addObject:rain];
+      } else if (specialRain == 2){
+         //evasive rain
+         Rain *rain = [[Rain alloc] initWithStyle:kRainStyleEvasive];
+         rain.position = CGPointMake(cloud.position.x, cloud.position.y);
+         [self addChild:rain];
+         [self.rainArray addObject:rain];
+      }
    }];
+   
+
 }
 -(void)didBeginContact:(SKPhysicsContact *)contact
 {
    SKPhysicsBody *firstBody, *secondBody;
    
-   if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask)
-   {
+   if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask){
       firstBody = contact.bodyA;
       secondBody = contact.bodyB;
    }
-   else
-   {
+   else{
       firstBody = contact.bodyB;
       secondBody = contact.bodyA;
    }
@@ -139,9 +157,9 @@ static const int floorCategory = 1 << 2;
       //rain hit the at the bottom of the screen, remove from view and array
       [self removeRain: (SKSpriteNode *)firstBody.node];
    } else if (firstBody.categoryBitMask == rainCategory && secondBody.categoryBitMask == cloudHitCategory){
-      NSLog(@"rain/cloud");
       //firstBody is rain
       //secondBody is cloud
+      NSLog(@"rain and cloud");
       [self rain:(SKSpriteNode *)firstBody.node collideWithCloud:(SKSpriteNode *)secondBody.node];
    }
 

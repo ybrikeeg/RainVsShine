@@ -23,6 +23,7 @@
 		420E77BE199EE1DF00DEBBD0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E7799199EE1DF00DEBBD0 /* UIKit.framework */; };
 		420E77C6199EE1DF00DEBBD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 420E77C4199EE1DF00DEBBD0 /* InfoPlist.strings */; };
 		420E77C8199EE1DF00DEBBD0 /* RainVsShineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77C7199EE1DF00DEBBD0 /* RainVsShineTests.m */; };
+		42DCE807199FD61900F3568E /* Rain.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DCE806199FD61900F3568E /* Rain.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,9 @@
 		420E77C3199EE1DF00DEBBD0 /* RainVsShineTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RainVsShineTests-Info.plist"; sourceTree = "<group>"; };
 		420E77C5199EE1DF00DEBBD0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		420E77C7199EE1DF00DEBBD0 /* RainVsShineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RainVsShineTests.m; sourceTree = "<group>"; };
+		42DCE805199FD61900F3568E /* Rain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rain.h; sourceTree = "<group>"; };
+		42DCE806199FD61900F3568E /* Rain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rain.m; sourceTree = "<group>"; };
+		42DCE808199FD95C00F3568E /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,13 +123,12 @@
 		420E779D199EE1DF00DEBBD0 /* RainVsShine */ = {
 			isa = PBXGroup;
 			children = (
-				420E77A6199EE1DF00DEBBD0 /* AttributorAppDelegate.h */,
-				420E77A7199EE1DF00DEBBD0 /* AttributorAppDelegate.m */,
+				42DCE808199FD95C00F3568E /* Constants.h */,
 				420E77A9199EE1DF00DEBBD0 /* Main.storyboard */,
-				420E77AC199EE1DF00DEBBD0 /* AttributorViewController.h */,
-				420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */,
 				420E77AF199EE1DF00DEBBD0 /* GameScene.h */,
 				420E77B0199EE1DF00DEBBD0 /* GameScene.m */,
+				42DCE805199FD61900F3568E /* Rain.h */,
+				42DCE806199FD61900F3568E /* Rain.m */,
 				420E77B4199EE1DF00DEBBD0 /* Images.xcassets */,
 				420E779E199EE1DF00DEBBD0 /* Supporting Files */,
 			);
@@ -135,6 +138,10 @@
 		420E779E199EE1DF00DEBBD0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				420E77A6199EE1DF00DEBBD0 /* AttributorAppDelegate.h */,
+				420E77A7199EE1DF00DEBBD0 /* AttributorAppDelegate.m */,
+				420E77AC199EE1DF00DEBBD0 /* AttributorViewController.h */,
+				420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */,
 				420E779F199EE1DF00DEBBD0 /* RainVsShine-Info.plist */,
 				420E77A0199EE1DF00DEBBD0 /* InfoPlist.strings */,
 				420E77A3199EE1DF00DEBBD0 /* main.m */,
@@ -259,6 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42DCE807199FD61900F3568E /* Rain.m in Sources */,
 				420E77A8199EE1DF00DEBBD0 /* AttributorAppDelegate.m in Sources */,
 				420E77AE199EE1DF00DEBBD0 /* AttributorViewController.m in Sources */,
 				420E77B1199EE1DF00DEBBD0 /* GameScene.m in Sources */,
