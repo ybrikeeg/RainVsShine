@@ -1,0 +1,488 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		420E7796199EE1DF00DEBBD0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E7795199EE1DF00DEBBD0 /* Foundation.framework */; };
+		420E7798199EE1DF00DEBBD0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E7797199EE1DF00DEBBD0 /* CoreGraphics.framework */; };
+		420E779A199EE1DF00DEBBD0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E7799199EE1DF00DEBBD0 /* UIKit.framework */; };
+		420E779C199EE1DF00DEBBD0 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E779B199EE1DF00DEBBD0 /* SpriteKit.framework */; };
+		420E77A2199EE1DF00DEBBD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 420E77A0199EE1DF00DEBBD0 /* InfoPlist.strings */; };
+		420E77A4199EE1DF00DEBBD0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77A3199EE1DF00DEBBD0 /* main.m */; };
+		420E77A8199EE1DF00DEBBD0 /* AttributorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77A7199EE1DF00DEBBD0 /* AttributorAppDelegate.m */; };
+		420E77AB199EE1DF00DEBBD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 420E77A9199EE1DF00DEBBD0 /* Main.storyboard */; };
+		420E77AE199EE1DF00DEBBD0 /* AttributorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */; };
+		420E77B1199EE1DF00DEBBD0 /* AttributorMyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77B0199EE1DF00DEBBD0 /* AttributorMyScene.m */; };
+		420E77B3199EE1DF00DEBBD0 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 420E77B2199EE1DF00DEBBD0 /* Spaceship.png */; };
+		420E77B5199EE1DF00DEBBD0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 420E77B4199EE1DF00DEBBD0 /* Images.xcassets */; };
+		420E77BC199EE1DF00DEBBD0 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E77BB199EE1DF00DEBBD0 /* XCTest.framework */; };
+		420E77BD199EE1DF00DEBBD0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E7795199EE1DF00DEBBD0 /* Foundation.framework */; };
+		420E77BE199EE1DF00DEBBD0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E7799199EE1DF00DEBBD0 /* UIKit.framework */; };
+		420E77C6199EE1DF00DEBBD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 420E77C4199EE1DF00DEBBD0 /* InfoPlist.strings */; };
+		420E77C8199EE1DF00DEBBD0 /* RainVsShineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77C7199EE1DF00DEBBD0 /* RainVsShineTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		420E77BF199EE1DF00DEBBD0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 420E778A199EE1DF00DEBBD0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 420E7791199EE1DF00DEBBD0;
+			remoteInfo = RainVsShine;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		420E7792199EE1DF00DEBBD0 /* RainVsShine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RainVsShine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		420E7795199EE1DF00DEBBD0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		420E7797199EE1DF00DEBBD0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		420E7799199EE1DF00DEBBD0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		420E779B199EE1DF00DEBBD0 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		420E779F199EE1DF00DEBBD0 /* RainVsShine-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RainVsShine-Info.plist"; sourceTree = "<group>"; };
+		420E77A1199EE1DF00DEBBD0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		420E77A3199EE1DF00DEBBD0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		420E77A5199EE1DF00DEBBD0 /* RainVsShine-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RainVsShine-Prefix.pch"; sourceTree = "<group>"; };
+		420E77A6199EE1DF00DEBBD0 /* AttributorAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributorAppDelegate.h; sourceTree = "<group>"; };
+		420E77A7199EE1DF00DEBBD0 /* AttributorAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributorAppDelegate.m; sourceTree = "<group>"; };
+		420E77AA199EE1DF00DEBBD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		420E77AC199EE1DF00DEBBD0 /* AttributorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributorViewController.h; sourceTree = "<group>"; };
+		420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributorViewController.m; sourceTree = "<group>"; };
+		420E77AF199EE1DF00DEBBD0 /* AttributorMyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributorMyScene.h; sourceTree = "<group>"; };
+		420E77B0199EE1DF00DEBBD0 /* AttributorMyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributorMyScene.m; sourceTree = "<group>"; };
+		420E77B2199EE1DF00DEBBD0 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
+		420E77B4199EE1DF00DEBBD0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		420E77BA199EE1DF00DEBBD0 /* RainVsShineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RainVsShineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		420E77BB199EE1DF00DEBBD0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		420E77C3199EE1DF00DEBBD0 /* RainVsShineTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RainVsShineTests-Info.plist"; sourceTree = "<group>"; };
+		420E77C5199EE1DF00DEBBD0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		420E77C7199EE1DF00DEBBD0 /* RainVsShineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RainVsShineTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		420E778F199EE1DF00DEBBD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				420E7798199EE1DF00DEBBD0 /* CoreGraphics.framework in Frameworks */,
+				420E779A199EE1DF00DEBBD0 /* UIKit.framework in Frameworks */,
+				420E779C199EE1DF00DEBBD0 /* SpriteKit.framework in Frameworks */,
+				420E7796199EE1DF00DEBBD0 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		420E77B7199EE1DF00DEBBD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				420E77BC199EE1DF00DEBBD0 /* XCTest.framework in Frameworks */,
+				420E77BE199EE1DF00DEBBD0 /* UIKit.framework in Frameworks */,
+				420E77BD199EE1DF00DEBBD0 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		420E7789199EE1DF00DEBBD0 = {
+			isa = PBXGroup;
+			children = (
+				420E779D199EE1DF00DEBBD0 /* RainVsShine */,
+				420E77C1199EE1DF00DEBBD0 /* RainVsShineTests */,
+				420E7794199EE1DF00DEBBD0 /* Frameworks */,
+				420E7793199EE1DF00DEBBD0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		420E7793199EE1DF00DEBBD0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				420E7792199EE1DF00DEBBD0 /* RainVsShine.app */,
+				420E77BA199EE1DF00DEBBD0 /* RainVsShineTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		420E7794199EE1DF00DEBBD0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				420E7795199EE1DF00DEBBD0 /* Foundation.framework */,
+				420E7797199EE1DF00DEBBD0 /* CoreGraphics.framework */,
+				420E7799199EE1DF00DEBBD0 /* UIKit.framework */,
+				420E779B199EE1DF00DEBBD0 /* SpriteKit.framework */,
+				420E77BB199EE1DF00DEBBD0 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		420E779D199EE1DF00DEBBD0 /* RainVsShine */ = {
+			isa = PBXGroup;
+			children = (
+				420E77A6199EE1DF00DEBBD0 /* AttributorAppDelegate.h */,
+				420E77A7199EE1DF00DEBBD0 /* AttributorAppDelegate.m */,
+				420E77A9199EE1DF00DEBBD0 /* Main.storyboard */,
+				420E77AC199EE1DF00DEBBD0 /* AttributorViewController.h */,
+				420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */,
+				420E77AF199EE1DF00DEBBD0 /* AttributorMyScene.h */,
+				420E77B0199EE1DF00DEBBD0 /* AttributorMyScene.m */,
+				420E77B2199EE1DF00DEBBD0 /* Spaceship.png */,
+				420E77B4199EE1DF00DEBBD0 /* Images.xcassets */,
+				420E779E199EE1DF00DEBBD0 /* Supporting Files */,
+			);
+			path = RainVsShine;
+			sourceTree = "<group>";
+		};
+		420E779E199EE1DF00DEBBD0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				420E779F199EE1DF00DEBBD0 /* RainVsShine-Info.plist */,
+				420E77A0199EE1DF00DEBBD0 /* InfoPlist.strings */,
+				420E77A3199EE1DF00DEBBD0 /* main.m */,
+				420E77A5199EE1DF00DEBBD0 /* RainVsShine-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		420E77C1199EE1DF00DEBBD0 /* RainVsShineTests */ = {
+			isa = PBXGroup;
+			children = (
+				420E77C7199EE1DF00DEBBD0 /* RainVsShineTests.m */,
+				420E77C2199EE1DF00DEBBD0 /* Supporting Files */,
+			);
+			path = RainVsShineTests;
+			sourceTree = "<group>";
+		};
+		420E77C2199EE1DF00DEBBD0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				420E77C3199EE1DF00DEBBD0 /* RainVsShineTests-Info.plist */,
+				420E77C4199EE1DF00DEBBD0 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		420E7791199EE1DF00DEBBD0 /* RainVsShine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 420E77CB199EE1DF00DEBBD0 /* Build configuration list for PBXNativeTarget "RainVsShine" */;
+			buildPhases = (
+				420E778E199EE1DF00DEBBD0 /* Sources */,
+				420E778F199EE1DF00DEBBD0 /* Frameworks */,
+				420E7790199EE1DF00DEBBD0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RainVsShine;
+			productName = RainVsShine;
+			productReference = 420E7792199EE1DF00DEBBD0 /* RainVsShine.app */;
+			productType = "com.apple.product-type.application";
+		};
+		420E77B9199EE1DF00DEBBD0 /* RainVsShineTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 420E77CE199EE1DF00DEBBD0 /* Build configuration list for PBXNativeTarget "RainVsShineTests" */;
+			buildPhases = (
+				420E77B6199EE1DF00DEBBD0 /* Sources */,
+				420E77B7199EE1DF00DEBBD0 /* Frameworks */,
+				420E77B8199EE1DF00DEBBD0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				420E77C0199EE1DF00DEBBD0 /* PBXTargetDependency */,
+			);
+			name = RainVsShineTests;
+			productName = RainVsShineTests;
+			productReference = 420E77BA199EE1DF00DEBBD0 /* RainVsShineTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		420E778A199EE1DF00DEBBD0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = Attributor;
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Kirby Gee - Stanford Univeristy";
+				TargetAttributes = {
+					420E77B9199EE1DF00DEBBD0 = {
+						TestTargetID = 420E7791199EE1DF00DEBBD0;
+					};
+				};
+			};
+			buildConfigurationList = 420E778D199EE1DF00DEBBD0 /* Build configuration list for PBXProject "RainVsShine" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 420E7789199EE1DF00DEBBD0;
+			productRefGroup = 420E7793199EE1DF00DEBBD0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				420E7791199EE1DF00DEBBD0 /* RainVsShine */,
+				420E77B9199EE1DF00DEBBD0 /* RainVsShineTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		420E7790199EE1DF00DEBBD0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				420E77A2199EE1DF00DEBBD0 /* InfoPlist.strings in Resources */,
+				420E77B5199EE1DF00DEBBD0 /* Images.xcassets in Resources */,
+				420E77B3199EE1DF00DEBBD0 /* Spaceship.png in Resources */,
+				420E77AB199EE1DF00DEBBD0 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		420E77B8199EE1DF00DEBBD0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				420E77C6199EE1DF00DEBBD0 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		420E778E199EE1DF00DEBBD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				420E77A8199EE1DF00DEBBD0 /* AttributorAppDelegate.m in Sources */,
+				420E77AE199EE1DF00DEBBD0 /* AttributorViewController.m in Sources */,
+				420E77B1199EE1DF00DEBBD0 /* AttributorMyScene.m in Sources */,
+				420E77A4199EE1DF00DEBBD0 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		420E77B6199EE1DF00DEBBD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				420E77C8199EE1DF00DEBBD0 /* RainVsShineTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		420E77C0199EE1DF00DEBBD0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 420E7791199EE1DF00DEBBD0 /* RainVsShine */;
+			targetProxy = 420E77BF199EE1DF00DEBBD0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		420E77A0199EE1DF00DEBBD0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				420E77A1199EE1DF00DEBBD0 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		420E77A9199EE1DF00DEBBD0 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				420E77AA199EE1DF00DEBBD0 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		420E77C4199EE1DF00DEBBD0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				420E77C5199EE1DF00DEBBD0 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		420E77C9199EE1DF00DEBBD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		420E77CA199EE1DF00DEBBD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		420E77CC199EE1DF00DEBBD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RainVsShine/RainVsShine-Prefix.pch";
+				INFOPLIST_FILE = "RainVsShine/RainVsShine-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		420E77CD199EE1DF00DEBBD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RainVsShine/RainVsShine-Prefix.pch";
+				INFOPLIST_FILE = "RainVsShine/RainVsShine-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		420E77CF199EE1DF00DEBBD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RainVsShine.app/RainVsShine";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RainVsShine/RainVsShine-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "RainVsShineTests/RainVsShineTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		420E77D0199EE1DF00DEBBD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RainVsShine.app/RainVsShine";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RainVsShine/RainVsShine-Prefix.pch";
+				INFOPLIST_FILE = "RainVsShineTests/RainVsShineTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		420E778D199EE1DF00DEBBD0 /* Build configuration list for PBXProject "RainVsShine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				420E77C9199EE1DF00DEBBD0 /* Debug */,
+				420E77CA199EE1DF00DEBBD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		420E77CB199EE1DF00DEBBD0 /* Build configuration list for PBXNativeTarget "RainVsShine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				420E77CC199EE1DF00DEBBD0 /* Debug */,
+				420E77CD199EE1DF00DEBBD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		420E77CE199EE1DF00DEBBD0 /* Build configuration list for PBXNativeTarget "RainVsShineTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				420E77CF199EE1DF00DEBBD0 /* Debug */,
+				420E77D0199EE1DF00DEBBD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 420E778A199EE1DF00DEBBD0 /* Project object */;
+}
