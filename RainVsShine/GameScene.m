@@ -18,8 +18,9 @@
 
 @implementation GameScene
 
-static const int balloonHitCategory = 1;
-static const int spikeHitCategory = 2;
+static const int rainCategory = 1 << 0;
+static const int cloudHitCategory = 1 << 1;
+static const int floorCategory = 1 << 2;
 
 -(id)initWithSize:(CGSize)size {
    if (self = [super initWithSize:size]) {
@@ -29,6 +30,17 @@ static const int spikeHitCategory = 2;
               self.physicsWorld.gravity = CGVectorMake(0,-0.8);
       
       [self initializeTheElements];
+      
+      
+      SKSpriteNode *roof = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(self.scene.size.width, 10)];
+      roof.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.scene.size.width, 1)];
+      
+      roof.position = CGPointMake(self.scene.size.width/2, -10);
+      roof.physicsBody.dynamic = NO;
+      roof.physicsBody.categoryBitMask = floorCategory;
+      roof.physicsBody.contactTestBitMask = rainCategory;
+      roof.physicsBody.collisionBitMask = rainCategory;
+      [self addChild:roof];
       
    }
    return self;
@@ -44,7 +56,7 @@ static const int spikeHitCategory = 2;
    [self runAction:cloudRepeat];
    
    self.rainArray = [[NSMutableArray alloc] init];
-   SKAction *rainWait = [SKAction waitForDuration:3.0f];
+   SKAction *rainWait = [SKAction waitForDuration:1.0f];
    SKAction *rainPerformSelector = [SKAction performSelector:@selector(createRain) onTarget:self];
    SKAction *rainSequence = [SKAction sequence:@[rainPerformSelector, rainWait]];
    SKAction *rainRepeat   = [SKAction repeatActionForever:rainSequence];
@@ -54,24 +66,16 @@ static const int spikeHitCategory = 2;
 
 - (void)createRain
 {
-   NSLog(@"rain");
+   NSLog(@"rain: %d", [self.rainArray count]);
    SKSpriteNode *rain = [SKSpriteNode spriteNodeWithImageNamed:@"rain"];
    rain.position = CGPointMake(rain.frame.size.width/2 + arc4random()%300, self.frame.size.height + RAIN_Y_OFFSET);
    rain.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:rain.frame.size];
-   rain.physicsBody.categoryBitMask = spikeHitCategory;
-   rain.physicsBody.contactTestBitMask = balloonHitCategory;
-   rain.physicsBody.collisionBitMask =  balloonHitCategory;
-   
+   rain.physicsBody.categoryBitMask = rainCategory;
+   rain.physicsBody.contactTestBitMask = cloudHitCategory | floorCategory;
+   rain.physicsBody.collisionBitMask = floorCategory;
    [self addChild:rain];
    
    [self.rainArray addObject:rain];
-   /*
-   SKAction *move = [SKAction moveToY:0 duration:arc4random()%100 / 100 + 3.0];
-   [rain runAction:move completion:^{
-      [self.rainArray removeObject:rain];
-      [rain removeFromParent];
-   }];
-    */
 }
 
 - (void)createCloud
@@ -80,9 +84,9 @@ static const int spikeHitCategory = 2;
    cloud.position = CGPointMake(-CLOUD_X_OFFSET, self.view.bounds.size.height - arc4random()%200 - STATUS_BAR_HEIGHT - cloud.frame.size.height/2);
    cloud.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:cloud.frame.size];
    cloud.physicsBody.affectedByGravity = NO;
-   cloud.physicsBody.categoryBitMask = balloonHitCategory;
-   cloud.physicsBody.contactTestBitMask = spikeHitCategory;
-   cloud.physicsBody.collisionBitMask =  spikeHitCategory;
+   cloud.physicsBody.categoryBitMask = cloudHitCategory;
+   cloud.physicsBody.contactTestBitMask = rainCategory;
+   cloud.physicsBody.collisionBitMask =  0;
    [self addChild:cloud];
    
    [self.cloudArray addObject:cloud];
@@ -99,20 +103,47 @@ static const int spikeHitCategory = 2;
    /* Called before each frame is rendered */
 }
 
+- (void)removeRain:(SKSpriteNode *)drop
+{
+   [self.rainArray removeObject:drop];
+   [drop removeFromParent];
+}
 
+- (void)rain:(SKSpriteNode *)drop collideWithCloud:(SKSpriteNode *)cloud
+{
+   //action to move drop to center of cloud
+   SKAction *move = [SKAction moveTo:cloud.position duration:.1f];
+   [drop runAction:move completion:^{
+      [self removeRain:drop];
+   }];
+}
 -(void)didBeginContact:(SKPhysicsContact *)contact
 {
    SKPhysicsBody *firstBody, *secondBody;
    
-   firstBody = contact.bodyA;
-   secondBody = contact.bodyB;
-   
-   if(firstBody.categoryBitMask == spikeHitCategory || secondBody.categoryBitMask == spikeHitCategory)
+   if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask)
    {
-      
-      NSLog(@"balloon hit the spikes");
-      //setup your methods and other things here
-      
+      firstBody = contact.bodyA;
+      secondBody = contact.bodyB;
    }
+   else
+   {
+      firstBody = contact.bodyB;
+      secondBody = contact.bodyA;
+   }
+   
+   if (firstBody.categoryBitMask == rainCategory && secondBody.categoryBitMask == floorCategory)
+   {
+      //firstBody is rain
+      //secondBody is floor
+      //rain hit the at the bottom of the screen, remove from view and array
+      [self removeRain: (SKSpriteNode *)firstBody.node];
+   } else if (firstBody.categoryBitMask == rainCategory && secondBody.categoryBitMask == cloudHitCategory){
+      NSLog(@"rain/cloud");
+      //firstBody is rain
+      //secondBody is cloud
+      [self rain:(SKSpriteNode *)firstBody.node collideWithCloud:(SKSpriteNode *)secondBody.node];
+   }
+
 }
 @end
