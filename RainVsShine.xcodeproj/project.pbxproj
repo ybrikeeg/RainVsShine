@@ -17,7 +17,6 @@
 		420E77AB199EE1DF00DEBBD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 420E77A9199EE1DF00DEBBD0 /* Main.storyboard */; };
 		420E77AE199EE1DF00DEBBD0 /* AttributorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */; };
 		420E77B1199EE1DF00DEBBD0 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77B0199EE1DF00DEBBD0 /* GameScene.m */; };
-		420E77B3199EE1DF00DEBBD0 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 420E77B2199EE1DF00DEBBD0 /* Spaceship.png */; };
 		420E77B5199EE1DF00DEBBD0 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 420E77B4199EE1DF00DEBBD0 /* Images.xcassets */; };
 		420E77BC199EE1DF00DEBBD0 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E77BB199EE1DF00DEBBD0 /* XCTest.framework */; };
 		420E77BD199EE1DF00DEBBD0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E7795199EE1DF00DEBBD0 /* Foundation.framework */; };
@@ -53,7 +52,6 @@
 		420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributorViewController.m; sourceTree = "<group>"; };
 		420E77AF199EE1DF00DEBBD0 /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		420E77B0199EE1DF00DEBBD0 /* GameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
-		420E77B2199EE1DF00DEBBD0 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		420E77B4199EE1DF00DEBBD0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		420E77BA199EE1DF00DEBBD0 /* RainVsShineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RainVsShineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		420E77BB199EE1DF00DEBBD0 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -128,7 +126,6 @@
 				420E77AD199EE1DF00DEBBD0 /* AttributorViewController.m */,
 				420E77AF199EE1DF00DEBBD0 /* GameScene.h */,
 				420E77B0199EE1DF00DEBBD0 /* GameScene.m */,
-				420E77B2199EE1DF00DEBBD0 /* Spaceship.png */,
 				420E77B4199EE1DF00DEBBD0 /* Images.xcassets */,
 				420E779E199EE1DF00DEBBD0 /* Supporting Files */,
 			);
@@ -243,7 +240,6 @@
 			files = (
 				420E77A2199EE1DF00DEBBD0 /* InfoPlist.strings in Resources */,
 				420E77B5199EE1DF00DEBBD0 /* Images.xcassets in Resources */,
-				420E77B3199EE1DF00DEBBD0 /* Spaceship.png in Resources */,
 				420E77AB199EE1DF00DEBBD0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -473,6 +469,7 @@
 				420E77CD199EE1DF00DEBBD0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		420E77CE199EE1DF00DEBBD0 /* Build configuration list for PBXNativeTarget "RainVsShineTests" */ = {
 			isa = XCConfigurationList;
@@ -481,6 +478,7 @@
 				420E77D0199EE1DF00DEBBD0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
