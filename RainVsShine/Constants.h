@@ -10,7 +10,8 @@
 #define RainVsShine_Constants_h
 
 static const int rainCategory = 1 << 0;
-static const int cloudHitCategory = 1 << 1;
-static const int floorCategory = 1 << 2;
+static const int specialRainCategory = 1 << 1;//rain after cloud collision so cloud no longer collides with rain it just created
+static const int cloudHitCategory = 1 << 2;
+static const int floorCategory = 1 << 3;
 
 #endif
