@@ -9,13 +9,13 @@
 #import "GameScene.h"
 #import "Rain.h"
 #import "Constants.h"
+#import "Sun.h"
 
 #define STATUS_BAR_HEIGHT 20
 #define CLOUD_X_OFFSET 50
-#define RAIN_Y_OFFSET 20
+#define RAIN_Y_OFFSET 40
+
 @interface GameScene ()
-//@property (nonatomic, strong) NSMutableArray *cloudArray;
-//@property (nonatomic, strong) NSMutableArray *rainArray;
 @end
 
 @implementation GameScene
@@ -29,10 +29,8 @@
       
       [self initializeTheElements];
       
-      
       SKSpriteNode *roof = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(self.scene.size.width, 10)];
       roof.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.scene.size.width, 1)];
-      
       roof.position = CGPointMake(self.scene.size.width/2, -10);
       roof.physicsBody.dynamic = NO;
       roof.physicsBody.categoryBitMask = floorCategory;
@@ -59,18 +57,20 @@
    SKAction *rainSequence = [SKAction sequence:@[rainPerformSelector, rainWait]];
    SKAction *rainRepeat   = [SKAction repeatActionForever:rainSequence];
    [self runAction:rainRepeat];
+   
+   
+   Sun *player = [[Sun alloc] init];
+   player.position = CGPointMake(self.frame.size.width/2, 0);
+   [self addChild:player];
 }
 
 - (void)createRain
 {
-  // NSLog(@"rain: %d", [self.rainArray count]);
    Rain *rain = [[Rain alloc] initWithStyle:kRainStyleNormal];
    rain.position = CGPointMake(rain.frame.size.width/2 + arc4random()%300, self.frame.size.height + RAIN_Y_OFFSET);
    rain.physicsBody.contactTestBitMask = cloudHitCategory | floorCategory;
    rain.physicsBody.categoryBitMask = rainCategory;
    [self addChild:rain];
-
-   //[self.rainArray addObject:rain];
 }
 
 - (void)createCloud
@@ -85,11 +85,8 @@
    cloud.zPosition = 2.0f;
    [self addChild:cloud];
    
-   //[self.cloudArray addObject:cloud];
-   
    SKAction *move = [SKAction moveToX:self.view.bounds.size.width + cloud.frame.size.width duration:arc4random()%100 / 100 + 3.0];
    [cloud runAction:move completion:^{
-      //[self.cloudArray removeObject:cloud];
       [cloud removeFromParent];
    }];
 }
@@ -101,7 +98,6 @@
 
 - (void)removeRain:(SKSpriteNode *)drop
 {
-   //[self.rainArray removeObject:drop];
    [drop removeFromParent];
 }
 
@@ -110,15 +106,14 @@
    Rain *rain = [[Rain alloc] initWithStyle:type];
    rain.physicsBody.contactTestBitMask = floorCategory;
    rain.physicsBody.categoryBitMask = specialRainCategory;
-   
-   //[self.rainArray addObject:rain];
-   
    return rain;
 }
 - (void)rain:(SKSpriteNode *)drop collideWithCloud:(SKSpriteNode *)cloud
 {
    //action to move drop to center of cloud
-   
+   cloud.physicsBody.contactTestBitMask = 0;
+   cloud.physicsBody.categoryBitMask = 0;
+
    SKAction *move = [SKAction moveTo:cloud.position duration:0.1f];
    SKAction *shrink = [SKAction scaleBy:0.3f duration:0.1f];
    SKAction *group = [SKAction group:@[move, shrink]];
@@ -131,32 +126,39 @@
    SKAction *wait = [SKAction waitForDuration:0.5f];
    SKAction *create = [SKAction runBlock:^{
       int specialRain = arc4random()%3;
-      specialRain = 2;
+
       //double rain
       if (specialRain == 0){
          Rain *rain1 = [self rainWithStyle:kRainStylePair];
-         rain1.position = CGPointMake(cloud.position.x - 5, cloud.position.y);
+         rain1.position = CGPointMake(cloud.position.x - 10, cloud.position.y);
          [self addChild:rain1];
-         
+         [rain1.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
+
          Rain *rain2 = [self rainWithStyle:kRainStylePair];
-         rain2.position = CGPointMake(cloud.position.x + 5, cloud.position.y);
+         rain2.position = CGPointMake(cloud.position.x + 10, cloud.position.y);
          [self addChild:rain2];
-         [rain2.physicsBody applyImpulse:CGVectorMake(0.3f, 0.0)];
-         
+         [rain2.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
       } else if (specialRain == 1){
-         //big rain
+         //large rain
          Rain *rain = [self rainWithStyle:kRainStyleLarge];
          rain.position = CGPointMake(cloud.position.x, cloud.position.y);
          [self addChild:rain];
+         [rain.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
       } else if (specialRain == 2){
          //evasive rain
          Rain *rain = [self rainWithStyle:kRainStyleEvasive];
          rain.position = CGPointMake(cloud.position.x, cloud.position.y);
          [self addChild:rain];
+         [rain.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
       }
+
    }];
    
-   [self runAction:[SKAction sequence:@[wait, create]]];
+   [self runAction:[SKAction sequence:@[wait, create]] completion:^{
+      cloud.physicsBody.contactTestBitMask = rainCategory;
+      cloud.physicsBody.categoryBitMask = cloudHitCategory;
+
+   }];
 
 }
 

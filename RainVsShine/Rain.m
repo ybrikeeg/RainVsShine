@@ -14,19 +14,16 @@
 -(id) initWithStyle:(RainStyle)type{
    if(self = [super init]) {
       if (type == kRainStyleNormal){
-         NSLog(@"Normal rain");
          self.health = 1;
          self = [Rain spriteNodeWithImageNamed:@"rain"];
          self.physicsBody.categoryBitMask = rainCategory;
          self.physicsBody.contactTestBitMask = cloudHitCategory | floorCategory;
       } else if (type == kRainStylePair){
-         NSLog(@"Pair rain");
          self.health = 1;
          self = [Rain spriteNodeWithImageNamed:@"colorRain"];
          self.physicsBody.categoryBitMask = specialRainCategory;
          self.physicsBody.contactTestBitMask = floorCategory;
       } else if (type == kRainStyleLarge){
-         NSLog(@"Large rain");
          self.health = 2;
          self = [Rain spriteNodeWithImageNamed:@"bigRain"];
          self.physicsBody.categoryBitMask = specialRainCategory;
@@ -38,7 +35,6 @@
          scaleUp.timingMode = SKActionTimingEaseInEaseOut;
          [self runAction: [SKAction sequence:@[delay, scaleUp]]];
       } else if (type == kRainStyleEvasive){
-         NSLog(@"Evasive rain");
          self.health = 1;
          self = [Rain spriteNodeWithImageNamed:@"colorRain"];
          self.physicsBody.categoryBitMask = specialRainCategory;
@@ -54,6 +50,7 @@
       self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.frame.size];
       self.physicsBody.collisionBitMask = floorCategory;
       self.zPosition = 1.0f;
+
    }
    return self;
 }
