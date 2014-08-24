@@ -1,23 +1,21 @@
 //
-//  Cloud.m
+//  Bullet.m
 //  RainVsShine
 //
-//  Created by Kirby Gee on 8/17/14.
+//  Created by Kirby Gee on 8/23/14.
 //  Copyright (c) 2014 Kirby Gee - Stanford Univeristy. All rights reserved.
 //
 
-#import "Cloud.h"
+#import "Bullet.h"
 
-@implementation Cloud
-
+@implementation Bullet
 -(id)init
 {
    if(self = [super init]) {
-      self = [Cloud spriteNodeWithImageNamed:@"cloud"];
-   
+      self = [Bullet spriteNodeWithImageNamed:@"bullet"];
+      self.damage = 1;
    }
    
    return self;
 }
-
 @end

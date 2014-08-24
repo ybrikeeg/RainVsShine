@@ -24,6 +24,7 @@
 		420E77C6199EE1DF00DEBBD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 420E77C4199EE1DF00DEBBD0 /* InfoPlist.strings */; };
 		420E77C8199EE1DF00DEBBD0 /* RainVsShineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77C7199EE1DF00DEBBD0 /* RainVsShineTests.m */; };
 		423274AF19A1C85B0033CDD5 /* Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 423274AE19A1C85B0033CDD5 /* Cloud.m */; };
+		42327A7619A96562005492B7 /* Bullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 42327A7519A96562005492B7 /* Bullet.m */; };
 		425F264E19A91B8000CBF677 /* Sun.m in Sources */ = {isa = PBXBuildFile; fileRef = 425F264D19A91B8000CBF677 /* Sun.m */; };
 		425F265119A91BC300CBF677 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425F265019A91BC300CBF677 /* CoreMotion.framework */; };
 		42DCE807199FD61900F3568E /* Rain.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DCE806199FD61900F3568E /* Rain.m */; };
@@ -64,6 +65,8 @@
 		420E77C7199EE1DF00DEBBD0 /* RainVsShineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RainVsShineTests.m; sourceTree = "<group>"; };
 		423274AD19A1C85B0033CDD5 /* Cloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cloud.h; sourceTree = "<group>"; };
 		423274AE19A1C85B0033CDD5 /* Cloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cloud.m; sourceTree = "<group>"; };
+		42327A7419A96562005492B7 /* Bullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bullet.h; sourceTree = "<group>"; };
+		42327A7519A96562005492B7 /* Bullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bullet.m; sourceTree = "<group>"; };
 		425F264C19A91B8000CBF677 /* Sun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sun.h; sourceTree = "<group>"; };
 		425F264D19A91B8000CBF677 /* Sun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sun.m; sourceTree = "<group>"; };
 		425F265019A91BC300CBF677 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -186,6 +189,8 @@
 				423274AE19A1C85B0033CDD5 /* Cloud.m */,
 				425F264C19A91B8000CBF677 /* Sun.h */,
 				425F264D19A91B8000CBF677 /* Sun.m */,
+				42327A7419A96562005492B7 /* Bullet.h */,
+				42327A7519A96562005492B7 /* Bullet.m */,
 			);
 			name = Nodes;
 			sourceTree = "<group>";
@@ -291,6 +296,7 @@
 				42DCE807199FD61900F3568E /* Rain.m in Sources */,
 				420E77A8199EE1DF00DEBBD0 /* AttributorAppDelegate.m in Sources */,
 				420E77AE199EE1DF00DEBBD0 /* AttributorViewController.m in Sources */,
+				42327A7619A96562005492B7 /* Bullet.m in Sources */,
 				423274AF19A1C85B0033CDD5 /* Cloud.m in Sources */,
 				420E77B1199EE1DF00DEBBD0 /* GameScene.m in Sources */,
 				425F264E19A91B8000CBF677 /* Sun.m in Sources */,

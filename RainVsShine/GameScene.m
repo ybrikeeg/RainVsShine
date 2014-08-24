@@ -10,12 +10,15 @@
 #import "Rain.h"
 #import "Constants.h"
 #import "Sun.h"
+#import "Bullet.h"
+#import "Cloud.h"
 
 #define STATUS_BAR_HEIGHT 20
 #define CLOUD_X_OFFSET 50
 #define RAIN_Y_OFFSET 40
 
 @interface GameScene ()
+@property (nonatomic, strong)Sun *sunPlayer;
 @end
 
 @implementation GameScene
@@ -25,7 +28,7 @@
       
       self.backgroundColor = [UIColor colorWithRed:.5 green:.7 blue:.3 alpha:1.0f];
       self.physicsWorld.contactDelegate = self;
-              self.physicsWorld.gravity = CGVectorMake(0,-0.8);
+      self.physicsWorld.gravity = CGVectorMake(0,-0.8);
       
       [self initializeTheElements];
       
@@ -37,7 +40,17 @@
       roof.physicsBody.contactTestBitMask = rainCategory;
       roof.physicsBody.collisionBitMask = rainCategory;
       [self addChild:roof];
-
+      
+      
+      SKSpriteNode *ceiling = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(self.scene.size.width, 10)];
+      ceiling.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.scene.size.width, 1)];
+      ceiling.position = CGPointMake(self.scene.size.width/2, self.scene.size.height + 50);
+      ceiling.physicsBody.dynamic = NO;
+      ceiling.physicsBody.categoryBitMask = ceilingCategory;
+      ceiling.physicsBody.contactTestBitMask = bulletCategory;
+      ceiling.physicsBody.collisionBitMask = bulletCategory;
+      [self addChild:ceiling];
+      
    }
    return self;
 }
@@ -59,23 +72,21 @@
    [self runAction:rainRepeat];
    
    
-   Sun *player = [[Sun alloc] init];
-   player.position = CGPointMake(self.frame.size.width/2, 0);
-   [self addChild:player];
+   self.sunPlayer = [[Sun alloc] init];
+   self.sunPlayer.position = CGPointMake(self.frame.size.width/2, 0);
+   [self addChild:self.sunPlayer];
 }
 
 - (void)createRain
 {
-   Rain *rain = [[Rain alloc] initWithStyle:kRainStyleNormal];
+   Rain *rain = [self rainWithStyle:kRainStyleNormal];
    rain.position = CGPointMake(rain.frame.size.width/2 + arc4random()%300, self.frame.size.height + RAIN_Y_OFFSET);
-   rain.physicsBody.contactTestBitMask = cloudHitCategory | floorCategory;
-   rain.physicsBody.categoryBitMask = rainCategory;
    [self addChild:rain];
 }
 
 - (void)createCloud
 {
-   SKSpriteNode *cloud = [SKSpriteNode spriteNodeWithImageNamed:@"cloud"];
+   Cloud *cloud = [[Cloud alloc] init];
    cloud.position = CGPointMake(-CLOUD_X_OFFSET, self.view.bounds.size.height - arc4random()%200 - STATUS_BAR_HEIGHT - cloud.frame.size.height/2);
    cloud.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:cloud.frame.size];
    cloud.physicsBody.affectedByGravity = NO;
@@ -96,7 +107,7 @@
    /* Called before each frame is rendered */
 }
 
-- (void)removeRain:(SKSpriteNode *)drop
+- (void)removeRain:(Rain *)drop
 {
    [drop removeFromParent];
 }
@@ -104,36 +115,51 @@
 - (Rain *)rainWithStyle:(RainStyle)type
 {
    Rain *rain = [[Rain alloc] initWithStyle:type];
-   rain.physicsBody.contactTestBitMask = floorCategory;
-   rain.physicsBody.categoryBitMask = specialRainCategory;
+   if (type == kRainStyleNormal){
+      rain.physicsBody.categoryBitMask = rainCategory;
+      rain.physicsBody.contactTestBitMask = floorCategory | cloudHitCategory | bulletCategory;
+      
+   } else{
+      rain.physicsBody.categoryBitMask = specialRainCategory;
+      rain.physicsBody.contactTestBitMask = floorCategory | bulletCategory;
+   }
+   
+   if (type == kRainStyleLarge){
+      rain.health = 2;
+   } else{
+      rain.health = 1;
+   }
+   
+   NSLog(@"Rain info: %d", rain.physicsBody.contactTestBitMask);
    return rain;
 }
-- (void)rain:(SKSpriteNode *)drop collideWithCloud:(SKSpriteNode *)cloud
+
+- (void)rain:(Rain *)drop collideWithCloud:(Cloud *)cloud
 {
    //action to move drop to center of cloud
    cloud.physicsBody.contactTestBitMask = 0;
    cloud.physicsBody.categoryBitMask = 0;
-
+   
    SKAction *move = [SKAction moveTo:cloud.position duration:0.1f];
    SKAction *shrink = [SKAction scaleBy:0.3f duration:0.1f];
    SKAction *group = [SKAction group:@[move, shrink]];
    SKAction *remove = [SKAction runBlock:^{
       [self removeRain:drop];
    }];
-
+   
    [drop runAction:[SKAction sequence:@[group, remove]]];
    
    SKAction *wait = [SKAction waitForDuration:0.5f];
    SKAction *create = [SKAction runBlock:^{
       int specialRain = arc4random()%3;
-
+      
       //double rain
       if (specialRain == 0){
          Rain *rain1 = [self rainWithStyle:kRainStylePair];
          rain1.position = CGPointMake(cloud.position.x - 10, cloud.position.y);
          [self addChild:rain1];
          [rain1.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
-
+         
          Rain *rain2 = [self rainWithStyle:kRainStylePair];
          rain2.position = CGPointMake(cloud.position.x + 10, cloud.position.y);
          [self addChild:rain2];
@@ -151,40 +177,71 @@
          [self addChild:rain];
          [rain.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
       }
-
+      
    }];
    
    [self runAction:[SKAction sequence:@[wait, create]] completion:^{
       cloud.physicsBody.contactTestBitMask = rainCategory;
       cloud.physicsBody.categoryBitMask = cloudHitCategory;
-
+      
    }];
+   
+}
 
+- (void)removeBullet:(Bullet *)bullet
+{
+   [bullet removeFromParent];
+}
+
+- (void)rain:(Rain *)rain collideWithBullet:(Bullet *)bullet
+{
+   NSLog(@"Rain: %d \t Bullet: %d", rain.health, bullet.damage);
+   rain.health -= bullet.damage;
+   NSLog(@"Result: %d", rain.health);
+   if (rain.health <= 0){
+      [self removeRain:rain];
+   } else{
+      [rain runAction:[SKAction scaleBy:0.5f duration:0.2f]];
+   }
+   [self removeBullet:bullet];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+   Bullet *bullet = [[Bullet alloc] init];
+   bullet.position = self.sunPlayer.position;
+   bullet.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:bullet.frame.size];
+   
+   bullet.physicsBody.contactTestBitMask = cloudHitCategory | rainCategory | specialRainCategory | ceilingCategory;
+   bullet.physicsBody.categoryBitMask = bulletCategory;
+   bullet.physicsBody.collisionBitMask = cloudHitCategory | rainCategory | specialRainCategory | ceilingCategory;
+   [self addChild:bullet];
+   
+   [bullet.physicsBody applyImpulse:CGVectorMake(0.0, 30.0)];
 }
 
 -(void)didBeginContact:(SKPhysicsContact *)contact
 {
    SKPhysicsBody *firstBody, *secondBody;
-   
    if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask){
       firstBody = contact.bodyA;
       secondBody = contact.bodyB;
-   }
-   else{
+   } else{
       firstBody = contact.bodyB;
       secondBody = contact.bodyA;
    }
-
+   
    if ((firstBody.categoryBitMask == rainCategory || firstBody.categoryBitMask == specialRainCategory) && secondBody.categoryBitMask == floorCategory){
-      //firstBody is rain
-      //secondBody is floor
       //rain hit the at the bottom of the screen, remove from view and array
-      [self removeRain: (SKSpriteNode *)firstBody.node];
+      [self removeRain: (Rain *)firstBody.node];
    } else if (firstBody.categoryBitMask == rainCategory && secondBody.categoryBitMask == cloudHitCategory){
-      //firstBody is rain
-      //secondBody is cloud
-      [self rain:(SKSpriteNode *)firstBody.node collideWithCloud:(SKSpriteNode *)secondBody.node];
+      [self rain:(Rain *)firstBody.node collideWithCloud:(Cloud *)secondBody.node];
+   } else if ((firstBody.categoryBitMask == rainCategory || firstBody.categoryBitMask == specialRainCategory) && secondBody.categoryBitMask == bulletCategory){
+      NSLog(@"booom!");
+      [self rain:(Rain *)firstBody.node collideWithBullet:(Bullet *)secondBody.node];
+   }else if (firstBody.categoryBitMask == ceilingCategory && secondBody.categoryBitMask == bulletCategory){
+      NSLog(@"ceiling!");
+      [self removeBullet:(Bullet *)secondBody.node];
    }
-
 }
 @end

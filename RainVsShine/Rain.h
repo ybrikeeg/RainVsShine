@@ -17,7 +17,7 @@ typedef enum {
 
 @interface Rain : SKSpriteNode
 
-@property (nonatomic) int health;
+@property (nonatomic) NSInteger health;
 
 -(id) initWithStyle:(RainStyle)type;
 

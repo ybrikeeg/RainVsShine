@@ -14,7 +14,7 @@
 -(id) initWithStyle:(RainStyle)type{
    if(self = [super init]) {
       if (type == kRainStyleNormal){
-         self.health = 1;
+         _health = 1;
          self = [Rain spriteNodeWithImageNamed:@"rain"];
          self.physicsBody.categoryBitMask = rainCategory;
          self.physicsBody.contactTestBitMask = cloudHitCategory | floorCategory;
