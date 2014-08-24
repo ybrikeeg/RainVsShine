@@ -15,4 +15,6 @@ static const int cloudHitCategory = 1 << 2;
 static const int floorCategory = 1 << 3;
 static const int ceilingCategory = 1 << 4;
 static const int bulletCategory = 1 << 5;
+static const int specialBulletCategory = 1 << 6;
+
 #endif

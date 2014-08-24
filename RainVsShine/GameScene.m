@@ -91,7 +91,7 @@
    cloud.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:cloud.frame.size];
    cloud.physicsBody.affectedByGravity = NO;
    cloud.physicsBody.categoryBitMask = cloudHitCategory;
-   cloud.physicsBody.contactTestBitMask = rainCategory;
+   cloud.physicsBody.contactTestBitMask = rainCategory | bulletCategory;
    cloud.physicsBody.collisionBitMask =  0;
    cloud.zPosition = 2.0f;
    [self addChild:cloud];
@@ -130,15 +130,14 @@
       rain.health = 1;
    }
    
-   NSLog(@"Rain info: %d", rain.physicsBody.contactTestBitMask);
    return rain;
 }
 
 - (void)rain:(Rain *)drop collideWithCloud:(Cloud *)cloud
 {
    //action to move drop to center of cloud
-   cloud.physicsBody.contactTestBitMask = 0;
-   cloud.physicsBody.categoryBitMask = 0;
+   cloud.physicsBody.contactTestBitMask = bulletCategory;
+   //cloud.physicsBody.categoryBitMask = 0;
    
    SKAction *move = [SKAction moveTo:cloud.position duration:0.1f];
    SKAction *shrink = [SKAction scaleBy:0.3f duration:0.1f];
@@ -153,8 +152,8 @@
    SKAction *create = [SKAction runBlock:^{
       int specialRain = arc4random()%3;
       
-      //double rain
       if (specialRain == 0){
+         //double rain
          Rain *rain1 = [self rainWithStyle:kRainStylePair];
          rain1.position = CGPointMake(cloud.position.x - 10, cloud.position.y);
          [self addChild:rain1];
@@ -195,32 +194,67 @@
 
 - (void)rain:(Rain *)rain collideWithBullet:(Bullet *)bullet
 {
-   NSLog(@"Rain: %d \t Bullet: %d", rain.health, bullet.damage);
+   NSString *burstPath = [[NSBundle mainBundle] pathForResource:@"rainBulletCollision" ofType:@"sks"];
+   SKEmitterNode *burstEmitter = [NSKeyedUnarchiver unarchiveObjectWithFile:burstPath];
+   burstEmitter.position = bullet.position;
+   [self addChild:burstEmitter];
+   
    rain.health -= bullet.damage;
-   NSLog(@"Result: %d", rain.health);
    if (rain.health <= 0){
       [self removeRain:rain];
    } else{
       [rain runAction:[SKAction scaleBy:0.5f duration:0.2f]];
    }
+   
    [self removeBullet:bullet];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+   /*
    Bullet *bullet = [[Bullet alloc] init];
    bullet.position = self.sunPlayer.position;
    bullet.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:bullet.frame.size];
    
-   bullet.physicsBody.contactTestBitMask = cloudHitCategory | rainCategory | specialRainCategory | ceilingCategory;
    bullet.physicsBody.categoryBitMask = bulletCategory;
-   bullet.physicsBody.collisionBitMask = cloudHitCategory | rainCategory | specialRainCategory | ceilingCategory;
+   bullet.physicsBody.contactTestBitMask = cloudHitCategory | rainCategory | specialRainCategory | ceilingCategory;
+   bullet.physicsBody.collisionBitMask = 0;
    [self addChild:bullet];
    
    [bullet.physicsBody applyImpulse:CGVectorMake(0.0, 30.0)];
+   */
+   [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO];
 }
 
--(void)didBeginContact:(SKPhysicsContact *)contact
+- (void)createBulletWithImpulse:(CGVector)impulse position:(CGPoint)pos categoryBitMask:(uint32_t)mask alreadyHitCloud:(BOOL)alreadyHitCloud
+{
+   Bullet *bullet = [[Bullet alloc] init];
+   bullet.position = pos;
+   
+   bullet.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:bullet.frame.size];
+   
+   bullet.physicsBody.categoryBitMask = specialBulletCategory;
+   bullet.physicsBody.contactTestBitMask = cloudHitCategory | rainCategory | specialRainCategory | ceilingCategory;
+   bullet.physicsBody.collisionBitMask = 0;
+   bullet.alreadyHitCloud = alreadyHitCloud;
+   [self addChild:bullet];
+   
+   if (alreadyHitCloud){
+      [bullet runAction:[SKAction rotateByAngle:tan(impulse.dy/impulse.dx) duration:0.01f]];
+   }
+   [bullet.physicsBody applyImpulse:impulse];
+}
+
+- (void)bullet:(Bullet *)bullet collideWithCloud:(Cloud *)cloud
+{
+   if (!bullet.alreadyHitCloud){
+      bullet.alreadyHitCloud = YES;
+      [self createBulletWithImpulse:CGVectorMake(-10.0f, 30.0f) position:bullet.position categoryBitMask:specialBulletCategory alreadyHitCloud:YES];
+      [self createBulletWithImpulse:CGVectorMake(10.0f, 30.0f) position:bullet.position categoryBitMask:specialBulletCategory alreadyHitCloud:YES];
+   }
+}
+
+- (void)didBeginContact:(SKPhysicsContact *)contact
 {
    SKPhysicsBody *firstBody, *secondBody;
    if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask){
@@ -236,12 +270,21 @@
       [self removeRain: (Rain *)firstBody.node];
    } else if (firstBody.categoryBitMask == rainCategory && secondBody.categoryBitMask == cloudHitCategory){
       [self rain:(Rain *)firstBody.node collideWithCloud:(Cloud *)secondBody.node];
-   } else if ((firstBody.categoryBitMask == rainCategory || firstBody.categoryBitMask == specialRainCategory) && secondBody.categoryBitMask == bulletCategory){
+   } else if ((firstBody.categoryBitMask == rainCategory || firstBody.categoryBitMask == specialRainCategory) && (secondBody.categoryBitMask == bulletCategory || secondBody.categoryBitMask == specialBulletCategory)){
       NSLog(@"booom!");
       [self rain:(Rain *)firstBody.node collideWithBullet:(Bullet *)secondBody.node];
-   }else if (firstBody.categoryBitMask == ceilingCategory && secondBody.categoryBitMask == bulletCategory){
+   }else if (firstBody.categoryBitMask == ceilingCategory && (secondBody.categoryBitMask == bulletCategory || secondBody.categoryBitMask == specialBulletCategory)){
       NSLog(@"ceiling!");
       [self removeBullet:(Bullet *)secondBody.node];
+   }
+   else if (firstBody.categoryBitMask == cloudHitCategory && secondBody.categoryBitMask == bulletCategory){
+      NSLog(@"bullet cloud!");
+      [self bullet:(Bullet *)secondBody.node collideWithCloud:(Cloud *)firstBody.node];
+      //[self removeBullet:(Bullet *)secondBody.node];
+   }   else if (firstBody.categoryBitMask == cloudHitCategory && secondBody.categoryBitMask == specialBulletCategory){
+      NSLog(@"bullet cloud!");
+      [self bullet:(Bullet *)secondBody.node collideWithCloud:(Cloud *)firstBody.node];
+      //[self removeBullet:(Bullet *)secondBody.node];
    }
 }
 @end

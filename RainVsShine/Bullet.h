@@ -11,5 +11,5 @@
 @interface Bullet : SKSpriteNode
 
 @property (nonatomic)NSInteger damage;
-
+@property (nonatomic) BOOL alreadyHitCloud;
 @end
