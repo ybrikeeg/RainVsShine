@@ -34,35 +34,46 @@
       self.physicsWorld.gravity = CGVectorMake(0,-0.8);
       
       [self initializeTheElements];
-      
-      SKSpriteNode *roof = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(self.scene.size.width, 10)];
-      roof.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.scene.size.width, 1)];
-      roof.position = CGPointMake(self.scene.size.width/2, -10);
-      roof.physicsBody.dynamic = NO;
-      roof.physicsBody.categoryBitMask = floorCategory;
-      roof.physicsBody.contactTestBitMask = rainCategory;
-      roof.physicsBody.collisionBitMask = rainCategory;
-      [self addChild:roof];
-      
-      
-      SKSpriteNode *ceiling = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(self.scene.size.width, 10)];
-      ceiling.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.scene.size.width, 1)];
-      ceiling.position = CGPointMake(self.scene.size.width/2, self.scene.size.height + 50);
-      ceiling.physicsBody.dynamic = NO;
-      ceiling.physicsBody.categoryBitMask = ceilingCategory;
-      ceiling.physicsBody.contactTestBitMask = bulletCategory;
-      ceiling.physicsBody.collisionBitMask = bulletCategory;
-      [self addChild:ceiling];
+      [self createBoundaries];
+    
       
       if (USE_AUTO_FIRE){
-         
          self.rainArray = [[NSMutableArray alloc] init];
       }
    }
    return self;
 }
 
+/*
+ *    Creates the roof and ceiling to remove bulelts/rains
+ */
+- (void)createBoundaries
+{
+   SKSpriteNode *roof = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(self.scene.size.width, 10)];
+   roof.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.scene.size.width, 1)];
+   roof.position = CGPointMake(self.scene.size.width/2, -10);
+   roof.physicsBody.dynamic = NO;
+   roof.physicsBody.categoryBitMask = floorCategory;
+   roof.physicsBody.contactTestBitMask = rainCategory;
+   roof.physicsBody.collisionBitMask = rainCategory;
+   [self addChild:roof];
+   
+   
+   SKSpriteNode *ceiling = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(self.scene.size.width, 10)];
+   ceiling.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.scene.size.width, 1)];
+   ceiling.position = CGPointMake(self.scene.size.width/2, self.scene.size.height + 50);
+   ceiling.physicsBody.dynamic = NO;
+   ceiling.physicsBody.categoryBitMask = ceilingCategory;
+   ceiling.physicsBody.contactTestBitMask = bulletCategory;
+   ceiling.physicsBody.collisionBitMask = bulletCategory;
+   [self addChild:ceiling];
+   
+}
 #pragma mark - Create rain and cloud schedulers
+/*
+ *    Creates the scheduler for the rain and cloud creators, and 
+ *    adds sun to the screen
+ */
 - (void)initializeTheElements
 {
    SKAction *cloudWait = [SKAction waitForDuration:1.5f];
@@ -82,7 +93,10 @@
    [self addChild:self.sunPlayer];
 }
 
-
+/*
+ *    Creates clouds on a given scheduler and lets gravity pull them
+ *    to the bottom of the screen
+ */
 - (void)createRain
 {
    Rain *rain = [self rainWithStyle:kRainStyleNormal];
@@ -94,6 +108,9 @@
    }
 }
 
+/*
+ *    Creates clouds on a given scheduler and moves them across the screen
+ */
 - (void)createCloud
 {
    Cloud *cloud = [[Cloud alloc] init];
@@ -112,6 +129,10 @@
    }];
 }
 
+/*
+ *    Creates rain with the parameterized type and applies the 
+ *    correct bit masks and health
+ */
 - (Rain *)rainWithStyle:(RainStyle)type
 {
    Rain *rain = [[Rain alloc] initWithStyle:type];
@@ -132,6 +153,10 @@
    return rain;
 }
 
+/*
+ *    Called every frame. If auto fire is on, then the sun will
+ *    move to the appropriate position and fire on the rain
+ */
 -(void)update:(CFTimeInterval)currentTime {
    /* Called before each frame is rendered */
    
@@ -159,11 +184,9 @@
             [self.rainArray removeObject:rain];
          }
          
-         
          SKAction *scaleUp = [SKAction scaleTo:0.8f duration:0.1f];
          SKAction *scaledown = [SKAction scaleTo:1.2f duration:0.1f];
          SKAction *sequence = [SKAction sequence:@[scaleUp, scaledown]];
-         
          SKAction *repeat   = [SKAction repeatActionForever:sequence];
          [rain runAction:repeat];
          
@@ -175,22 +198,38 @@
    }
 }
 
+/*
+ *    Remove rain drop scene
+ */
 - (void)removeRain:(Rain *)drop
 {
    [drop removeFromParent];
 }
 
+/*
+ *    Remove bullet scene
+ */
 - (void)removeBullet:(Bullet *)bullet
 {
    [bullet removeFromParent];
 }
 
 #pragma mark - Create bullets
+
+/*
+ *    Fire a bullet at the sun's current position when the user touches the screen
+ */
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
    [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO];
 }
 
+/*
+ *    This method creates the bullet, applies the appropriate 
+ *    impulse (could have non-zero dx if hit cloud), correct position
+ *    sun's position or bullet's position (if hit cloud), correct mask,
+ *    and bool if it has already hit a cloud
+ */
 - (void)createBulletWithImpulse:(CGVector)impulse position:(CGPoint)pos categoryBitMask:(uint32_t)mask alreadyHitCloud:(BOOL)alreadyHitCloud
 {
    Bullet *bullet = [[Bullet alloc] init];
@@ -212,6 +251,10 @@
 
 #pragma mark - Collision code
 
+/*
+ *    Method creates special rain when rain hits cloud and changes
+ *    the appropriate bit masks
+ */
 - (void)rain:(Rain *)drop collideWithCloud:(Cloud *)cloud
 {
    
@@ -285,6 +328,10 @@
    }
 }
 
+/*
+ *    Added particle emitter to scene and remove bullet if health
+ *    is zero
+ */
 - (void)rain:(Rain *)rain collideWithBullet:(Bullet *)bullet
 {
    NSString *burstPath = [[NSBundle mainBundle] pathForResource:@"rainBulletCollision" ofType:@"sks"];
@@ -306,6 +353,10 @@
    [self removeBullet:bullet];
 }
 
+/*
+ *    Creates the bullet burst effect where it spawns 2 more bullets
+ *    and changes alreadyHitCloud bool
+ */
 - (void)bullet:(Bullet *)bullet collideWithCloud:(Cloud *)cloud
 {
    if (!bullet.alreadyHitCloud){
@@ -315,6 +366,11 @@
    }
 }
 
+/*
+ *    Delegate method for any collisions. Handles all the logic
+ *    for any type of collision. Category bit mask order is important
+ *    for assigning firstBody/secondBody nodes
+ */
 - (void)didBeginContact:(SKPhysicsContact *)contact
 {
    SKPhysicsBody *firstBody, *secondBody;
