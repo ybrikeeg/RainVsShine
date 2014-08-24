@@ -144,8 +144,7 @@
 				420E77A9199EE1DF00DEBBD0 /* Main.storyboard */,
 				420E77AF199EE1DF00DEBBD0 /* GameScene.h */,
 				420E77B0199EE1DF00DEBBD0 /* GameScene.m */,
-				423C889519A9A7EC008D13DD /* rainBulletCollision.sks */,
-				423C889619A9A7EC008D13DD /* spark.png */,
+				42DA6E3A19AA87270088C13C /* ParticleEmitters */,
 				425F264F19A91B8C00CBF677 /* Nodes */,
 				420E77B4199EE1DF00DEBBD0 /* Images.xcassets */,
 				420E779E199EE1DF00DEBBD0 /* Supporting Files */,
@@ -199,6 +198,15 @@
 				42327A7519A96562005492B7 /* Bullet.m */,
 			);
 			name = Nodes;
+			sourceTree = "<group>";
+		};
+		42DA6E3A19AA87270088C13C /* ParticleEmitters */ = {
+			isa = PBXGroup;
+			children = (
+				423C889519A9A7EC008D13DD /* rainBulletCollision.sks */,
+				423C889619A9A7EC008D13DD /* spark.png */,
+			);
+			name = ParticleEmitters;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

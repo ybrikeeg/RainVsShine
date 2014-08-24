@@ -30,7 +30,7 @@
       
       
       
-      [self runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:-M_PI duration:2.0f]]];
+      //[self runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:-M_PI duration:2.0f]]];
       [NSTimer scheduledTimerWithTimeInterval:1.0/60.0f target:self selector:@selector(update:) userInfo:nil repeats:YES];
    }
    
