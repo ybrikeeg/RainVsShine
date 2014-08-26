@@ -29,6 +29,7 @@
 		423C889819A9A7EC008D13DD /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 423C889619A9A7EC008D13DD /* spark.png */; };
 		425F264E19A91B8000CBF677 /* Sun.m in Sources */ = {isa = PBXBuildFile; fileRef = 425F264D19A91B8000CBF677 /* Sun.m */; };
 		425F265119A91BC300CBF677 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 425F265019A91BC300CBF677 /* CoreMotion.framework */; };
+		4277552219AAAE6F008A3431 /* bulletCloudCollision.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4277552119AAAE6F008A3431 /* bulletCloudCollision.sks */; };
 		42DCE807199FD61900F3568E /* Rain.m in Sources */ = {isa = PBXBuildFile; fileRef = 42DCE806199FD61900F3568E /* Rain.m */; };
 /* End PBXBuildFile section */
 
@@ -74,6 +75,7 @@
 		425F264C19A91B8000CBF677 /* Sun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sun.h; sourceTree = "<group>"; };
 		425F264D19A91B8000CBF677 /* Sun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sun.m; sourceTree = "<group>"; };
 		425F265019A91BC300CBF677 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		4277552119AAAE6F008A3431 /* bulletCloudCollision.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = bulletCloudCollision.sks; sourceTree = "<group>"; };
 		42DCE805199FD61900F3568E /* Rain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rain.h; sourceTree = "<group>"; };
 		42DCE806199FD61900F3568E /* Rain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rain.m; sourceTree = "<group>"; };
 		42DCE808199FD95C00F3568E /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 		42DA6E3A19AA87270088C13C /* ParticleEmitters */ = {
 			isa = PBXGroup;
 			children = (
+				4277552119AAAE6F008A3431 /* bulletCloudCollision.sks */,
 				423C889519A9A7EC008D13DD /* rainBulletCollision.sks */,
 				423C889619A9A7EC008D13DD /* spark.png */,
 			);
@@ -286,6 +289,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4277552219AAAE6F008A3431 /* bulletCloudCollision.sks in Resources */,
 				423C889819A9A7EC008D13DD /* spark.png in Resources */,
 				423C889719A9A7EC008D13DD /* rainBulletCollision.sks in Resources */,
 				420E77A2199EE1DF00DEBBD0 /* InfoPlist.strings in Resources */,

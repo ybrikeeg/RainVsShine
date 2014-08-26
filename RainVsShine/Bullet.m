@@ -15,6 +15,14 @@
       self = [Bullet spriteNodeWithImageNamed:@"bullet"];
       self.damage = 1;
       self.alreadyHitCloud = NO;
+      
+      NSString *burstPath = [[NSBundle mainBundle] pathForResource:@"bulletCloudCollision" ofType:@"sks"];
+      SKEmitterNode *burstEmitter = [NSKeyedUnarchiver unarchiveObjectWithFile:burstPath];
+      burstEmitter.position = CGPointMake(self.position.x, self.position.y - 14);
+      burstEmitter.zPosition = -1;
+      [self addChild:burstEmitter];
+      
+      self.zPosition = 1;
    }
    
    return self;

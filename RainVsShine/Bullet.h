@@ -12,4 +12,5 @@
 
 @property (nonatomic)NSInteger damage;
 @property (nonatomic) BOOL alreadyHitCloud;
+
 @end

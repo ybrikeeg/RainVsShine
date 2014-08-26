@@ -50,7 +50,7 @@
       self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.frame.size];
       self.physicsBody.collisionBitMask = floorCategory;
       self.zPosition = 1.0f;
-
+      self.alreadyHitCloud = NO;
    }
    return self;
 }
