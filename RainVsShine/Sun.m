@@ -7,6 +7,7 @@
 //
 
 #import "Sun.h"
+#import "GameScene.h"
 
 @interface Sun ()
 @property (nonatomic) CGPoint playerVelocity;
@@ -23,11 +24,12 @@
       self.motionManager = [[CMMotionManager alloc] init];
       [self.motionManager startAccelerometerUpdatesToQueue:[[NSOperationQueue alloc] init]
                                                withHandler:^(CMAccelerometerData *data, NSError *error){
-                                                  float deceleration = 0.1f;
-                                                  float sensitivity = 40.0f;
-                                                  self.playerVelocity = CGPointMake(self.playerVelocity.x * deceleration + data.acceleration.x * sensitivity, 0);
+                                                  if (!self.aiToggle){
+                                                     float deceleration = 0.1f;
+                                                     float sensitivity = 40.0f;
+                                                     self.playerVelocity = CGPointMake(self.playerVelocity.x * deceleration + data.acceleration.x * sensitivity, 0);
+                                                  }
                                                }];
-      
       
       
       //[self runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:-M_PI duration:2.0f]]];

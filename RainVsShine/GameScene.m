@@ -64,6 +64,9 @@
    } else if (self.aiToggle == 0){
       self.aiToggle = 1;
    }
+   
+   self.sunPlayer.aiToggle = self.aiToggle;
+
 }
 
 - (void)createHUD

@@ -12,6 +12,6 @@
 @interface Sun : SKSpriteNode
 
 @property (nonatomic, strong)CMMotionManager *motionManager;
-
+@property (nonatomic) NSInteger aiToggle;
 
 @end
