@@ -24,6 +24,11 @@
 @property (nonatomic, strong) Sun *sunPlayer;
 @property (nonatomic, strong) NSMutableArray *rainArray;
 @property (nonatomic) NSInteger aiToggle;
+@property (nonatomic) NSUInteger streak;
+@property (nonatomic) NSUInteger consecutive;
+@property (nonatomic) NSUInteger lastIdentifier;
+@property (nonatomic) NSUInteger bulletCount;
+@property (nonatomic, strong) UILabel *streakLabel;
 @end
 
 @implementation GameScene
@@ -35,15 +40,17 @@
       self.physicsWorld.contactDelegate = self;
       self.physicsWorld.gravity = CGVectorMake(0,-0.8);
       self.physicsWorld.speed = 1.0f;
+      
+      self.streak = 0;
+      self.consecutive = 0;
+      self.bulletCount = 0;
       [self createHUD];
       [self initializeTheElements];
       [self createBoundaries];
       
       self.aiToggle = USE_AUTO_FIRE;
-      
       self.rainArray = [[NSMutableArray alloc] init];
       
-
    }
    return self;
 }
@@ -55,7 +62,13 @@
    [ai addTarget:self action:@selector(toggle:) forControlEvents:UIControlEventValueChanged];
    [ai setOn:self.aiToggle];
    [self.view addSubview:ai];
+   
+   self.streakLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, ai.frame.size.height/2, 40, 20)];
+   [self.view addSubview:self.streakLabel];
 }
+
+
+
 
 - (void)toggle:(UISwitch *)theSwitch
 {
@@ -69,6 +82,12 @@
 
 }
 
+- (void)setStreak:(NSUInteger)streak
+{
+   _streak = streak;
+   self.streakLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.streak];
+   NSLog(@"streak: %lu", (unsigned long)_streak);
+}
 - (void)createHUD
 {
    SKSpriteNode *hudSprite = [SKSpriteNode spriteNodeWithImageNamed:@"hud"];
@@ -142,15 +161,17 @@
    SKAction *cloudRepeat   = [SKAction repeatActionForever:cloudSequence];
    [self runAction:cloudRepeat];
    
-   SKAction *rainWait = [SKAction waitForDuration:1.0f];
+   SKAction *rainWait = [SKAction waitForDuration:(self.aiToggle) ? 0.07f : 1.0f];
    SKAction *rainPerformSelector = [SKAction performSelector:@selector(createRain) onTarget:self];
    SKAction *rainSequence = [SKAction sequence:@[rainPerformSelector, rainWait]];
    SKAction *rainRepeat   = [SKAction repeatActionForever:rainSequence];
    [self runAction:rainRepeat];
    
+   if (!self.sunPlayer){
    self.sunPlayer = [[Sun alloc] init];
    self.sunPlayer.position = CGPointMake(self.frame.size.width/2, 0);
    [self addChild:self.sunPlayer];
+   }
 }
 
 /*
@@ -266,9 +287,9 @@
          SKAction *repeat   = [SKAction repeatActionForever:sequence];
          [rain runAction:repeat];
          
-         float duration = arc4random()%80 / (float)50;
-         [self.sunPlayer runAction:[SKAction sequence:@[[SKAction moveToX:rain.position.x duration:0.25f], [SKAction waitForDuration:duration]]] completion:^{
-            [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO];
+         CGFloat duration =  (self.aiToggle) ? 0.05f : arc4random()%80 / (float)50;
+         [self.sunPlayer runAction:[SKAction sequence:@[[SKAction moveToX:rain.position.x duration:0.06f], [SKAction waitForDuration:duration]]] completion:^{
+            [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
             
          }];
       }
@@ -305,7 +326,7 @@
       [button runAction:wait];
       NSLog(@"texture2: %@", button.texture);
    } else{
-      [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO];
+      [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
    }
 }
 
@@ -315,7 +336,7 @@
  *    sun's position or bullet's position (if hit cloud), correct mask,
  *    and bool if it has already hit a cloud
  */
-- (void)createBulletWithImpulse:(CGVector)impulse position:(CGPoint)pos categoryBitMask:(uint32_t)mask alreadyHitCloud:(BOOL)alreadyHitCloud
+- (void)createBulletWithImpulse:(CGVector)impulse position:(CGPoint)pos categoryBitMask:(uint32_t)mask alreadyHitCloud:(BOOL)alreadyHitCloud identifier:(NSUInteger)identifier
 {
    Bullet *bullet = [[Bullet alloc] init];
    bullet.position = pos;
@@ -326,6 +347,7 @@
    bullet.physicsBody.collisionBitMask = 0;
    bullet.physicsBody.usesPreciseCollisionDetection = YES;
    bullet.alreadyHitCloud = alreadyHitCloud;
+   bullet.identifier = identifier;
    [self addChild:bullet];
    
    if (alreadyHitCloud){
@@ -431,6 +453,7 @@
    
    rain.health -= bullet.damage;
    if (rain.health <= 0){
+      self.streak++;
       [self removeRain:rain];
       if (self.aiToggle){
          if ([_rainArray containsObject:rain]){
@@ -451,9 +474,33 @@
 {
    if (!bullet.alreadyHitCloud){
       bullet.alreadyHitCloud = YES;
-      [self createBulletWithImpulse:CGVectorMake(-10.0f, 30.0f) position:CGPointMake(bullet.position.x, bullet.position.y + 10) categoryBitMask:specialBulletCategory alreadyHitCloud:YES];
-      [self createBulletWithImpulse:CGVectorMake(10.0f, 30.0f) position:CGPointMake(bullet.position.x, bullet.position.y + 10) categoryBitMask:specialBulletCategory alreadyHitCloud:YES];
+      [self createBulletWithImpulse:CGVectorMake(-10.0f, 30.0f) position:CGPointMake(bullet.position.x, bullet.position.y + 10) categoryBitMask:specialBulletCategory alreadyHitCloud:YES identifier:bullet.identifier];
+      [self createBulletWithImpulse:CGVectorMake(10.0f, 30.0f) position:CGPointMake(bullet.position.x, bullet.position.y + 10) categoryBitMask:specialBulletCategory alreadyHitCloud:YES identifier:bullet.identifier];
    }
+}
+
+/*
+ *    When the bullet hits the ceiling, check category bit mask
+ *    to determine if streak should be reset
+ */
+- (void)bullet:(Bullet *)bullet collideWithCeiling:(SKNode *)ceiling
+{
+   
+   if (self.lastIdentifier == bullet.identifier){
+      self.consecutive++;
+   } else{
+      self.consecutive = 0;
+      if (bullet.physicsBody.categoryBitMask == bulletCategory){
+         self.streak = 0;
+      }
+   }
+   
+   if (self.consecutive == 2){
+      self.streak = 0;
+   }
+   self.lastIdentifier = bullet.identifier;
+   
+   [self removeBullet:bullet];
 }
 
 /*
@@ -489,6 +536,7 @@
       [self rain:(Rain *)firstBody.node collideWithBullet:(Bullet *)secondBody.node];
       
    }else if (firstBody.categoryBitMask == ceilingCategory && (secondBody.categoryBitMask == bulletCategory || secondBody.categoryBitMask == specialBulletCategory)){
+      [self bullet:(Bullet *)secondBody.node collideWithCeiling:firstBody.node];
       [self removeBullet:(Bullet *)secondBody.node];
       
    }
