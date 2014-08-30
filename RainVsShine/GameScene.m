@@ -7,11 +7,13 @@
 //
 
 #import "GameScene.h"
+#import "StreakEngive.h"
 #import "Rain.h"
 #import "Constants.h"
 #import "Sun.h"
 #import "Bullet.h"
 #import "Cloud.h"
+#import "Guide.h"
 
 #define USE_AUTO_FIRE 0
 
@@ -29,6 +31,11 @@
 @property (nonatomic) NSUInteger lastIdentifier;
 @property (nonatomic) NSUInteger bulletCount;
 @property (nonatomic, strong) UILabel *streakLabel;
+
+//streak
+@property (nonatomic, strong) StreakEngive *streakEngine;
+@property (nonatomic, strong) Guide *guide;
+@property (nonatomic) BOOL guideOn;
 @end
 
 @implementation GameScene
@@ -51,6 +58,9 @@
       self.aiToggle = USE_AUTO_FIRE;
       self.rainArray = [[NSMutableArray alloc] init];
       
+      self.streakEngine = [[StreakEngive alloc] init];
+      self.streakEngine.delegate = self;
+      self.guideOn = NO;
    }
    return self;
 }
@@ -69,7 +79,6 @@
 
 
 
-
 - (void)toggle:(UISwitch *)theSwitch
 {
    if (self.aiToggle == 1){
@@ -82,12 +91,6 @@
 
 }
 
-- (void)setStreak:(NSUInteger)streak
-{
-   _streak = streak;
-   self.streakLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.streak];
-   NSLog(@"streak: %lu", (unsigned long)_streak);
-}
 - (void)createHUD
 {
    SKSpriteNode *hudSprite = [SKSpriteNode spriteNodeWithImageNamed:@"hud"];
@@ -147,6 +150,7 @@
    [self addChild:ceiling];
    
 }
+
 
 #pragma mark - Create rain and cloud schedulers
 /*
@@ -249,13 +253,59 @@
    [bullet removeFromParent];
 }
 
-#pragma  mark - Auto-fire
+#pragma mark - Streak Engine
+
+/*
+ *    Delegate method of the StreakEngine. Updates the guideOn 
+ *    bool and if it changes state, the setter removes/adds the guide
+ */
+- (void)guideChangedState:(BOOL)active
+{
+   self.guideOn = active;
+}
+
+/*
+ *    Setter for the guideOn bool. Adds the guide to the screen
+ *    or removes it
+ */
+- (void)setGuideOn:(BOOL)guideOn
+{
+   _guideOn = guideOn;
+
+   if (guideOn){
+      self.guide = [[Guide alloc] init];
+      self.guide.position = CGPointMake(self.sunPlayer.position.x, self.view.frame.size.height/2);
+      [self addChild:self.guide];
+   } else if (!guideOn){
+      [self.guide removeFromParent];
+   }
+}
+
+
+/*
+ *    Setter for the streak variable. Every update calls the streak engine
+ *    to do its analysis
+ */
+- (void)setStreak:(NSUInteger)streak
+{
+   _streak = streak;
+   self.streakLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.streak];
+   [self.streakEngine updateStreak:_streak];
+}
+
+
+#pragma  mark - Game loop
 /*
  *    Called every frame. If auto fire is on, then the sun will
- *    move to the appropriate position and fire on the rain
+ *    move to the appropriate position and fire on the rain. Changes
+ *    the guides x coordinate to be the same as the suns
  */
 -(void)update:(CFTimeInterval)currentTime {
    /* Called before each frame is rendered */
+   
+   if (_guideOn){
+      self.guide.position = CGPointMake(self.sunPlayer.position.x, self.view.frame.size.height/2);
+   }
    
    if (self.aiToggle){
       if ([self.rainArray count] > 0 && !self.sunPlayer.hasActions){
@@ -295,6 +345,7 @@
       }
    }
 }
+
 
 #pragma mark - Create bullets
 

@@ -11,7 +11,7 @@
 @implementation Bullet
 -(id)init
 {
-   if(self = [super init]) {
+   if (self = [super init]) {
       self = [Bullet spriteNodeWithImageNamed:@"bullet"];
       self.damage = 1;
       self.alreadyHitCloud = NO;
