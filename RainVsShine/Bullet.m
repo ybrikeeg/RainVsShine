@@ -9,14 +9,16 @@
 #import "Bullet.h"
 
 @implementation Bullet
--(id)init
+- (id)initWithBulletType:(BulletType)type
 {
    if (self = [super init]) {
       self = [Bullet spriteNodeWithImageNamed:@"bullet"];
-      self.damage = 1;
+      self.damage = (type == kBulletNormal) ? 1 : 2;
       self.alreadyHitCloud = NO;
       
-      NSString *burstPath = [[NSBundle mainBundle] pathForResource:@"bulletCloudCollision" ofType:@"sks"];
+      NSString *resource = (type == kBulletNormal) ? @"bulletCloudCollisionForTypeNormal" : @"bulletCloudCollisionForTypeLarge";
+      
+      NSString *burstPath = [[NSBundle mainBundle] pathForResource:resource ofType:@"sks"];
       SKEmitterNode *burstEmitter = [NSKeyedUnarchiver unarchiveObjectWithFile:burstPath];
       burstEmitter.position = CGPointMake(self.position.x, self.position.y - 14);
       burstEmitter.zPosition = -1;

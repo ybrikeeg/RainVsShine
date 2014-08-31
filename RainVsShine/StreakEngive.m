@@ -11,8 +11,10 @@
 @interface StreakEngive ()
 @property (nonatomic, strong) NSTimer *update;
 @property (nonatomic) NSUInteger guideTimeLeft;
-
+@property (nonatomic) NSUInteger largeBulletsLeft;
 @end
+
+
 @implementation StreakEngive
 
 
@@ -20,19 +22,40 @@
 {
    self = [super init];
    if (self){
-      
       self.update = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(update:) userInfo:nil repeats:YES];
       self.guideTimeLeft = 0;
+      self.largeBulletsLeft = 0;
    }
    
    return self;
 }
 
+- (void)bulletFired
+{
+   if (self.largeBulletsLeft > 0){
+      --self.largeBulletsLeft;
+      self.largeBulletLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.largeBulletsLeft];
+   }
+}
 
+/*
+ *    Called every second to update streak variables that control
+ *    how much time the play has left with a given streak
+ */
 - (void)update:(NSTimer *)sender
 {
    if (self.guideTimeLeft > 0){
       --self.guideTimeLeft;
+   }
+   
+   self.guideLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.guideTimeLeft];
+}
+
+-(void)setLargeBulletsLeft:(NSUInteger)largeBulletsLeft
+{
+   _largeBulletsLeft = largeBulletsLeft;
+   if (_largeBulletsLeft == 0){
+      [self.delegate largeBulletChangedToState:NO];
    }
 }
 
@@ -45,7 +68,7 @@
 {
    _guideTimeLeft = guideTimeLeft;
    if (_guideTimeLeft == 0){
-      [self.delegate guideChangedState:NO];
+      [self.delegate guideChangedToState:NO];
    }
 }
 
@@ -57,13 +80,16 @@
  */
 - (void)updateStreak:(NSInteger)streak
 {
-   //turn guide on
-   if (streak == 2){
+   if (streak == 10){//turn guide on for 10 seconds
       if (self.guideTimeLeft == 0){
-         [self.delegate guideChangedState:YES];
+         [self.delegate guideChangedToState:YES];
       }
       self.guideTimeLeft += 10;
-      
+   } else if (streak == 2){//large bullet (5 shots)
+      if (self.largeBulletsLeft == 0){
+         [self.delegate largeBulletChangedToState:YES];
+      }
+      self.largeBulletsLeft += 5;
    }
 }
 

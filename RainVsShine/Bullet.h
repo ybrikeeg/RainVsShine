@@ -8,9 +8,19 @@
 
 #import <SpriteKit/SpriteKit.h>
 
+
+typedef enum {
+   kBulletNormal,
+   kBulletLarge
+} BulletType;
+
 @interface Bullet : SKSpriteNode
 
 @property (nonatomic)NSInteger damage;
 @property (nonatomic) BOOL alreadyHitCloud;
 @property (nonatomic) NSUInteger identifier;
+
+
+- (id)initWithBulletType:(BulletType)type;
+
 @end

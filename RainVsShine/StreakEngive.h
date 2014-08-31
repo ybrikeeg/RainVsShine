@@ -12,13 +12,18 @@
 
 @optional
 @required
-- (void)guideChangedState:(BOOL)active;
+- (void)guideChangedToState:(BOOL)active;
+- (void)largeBulletChangedToState:(BOOL)active;
 @end
 
 @interface StreakEngive : NSObject
 
 @property (nonatomic, weak) id <StreakEngineDelegate> delegate;
+@property (nonatomic, strong) UILabel *guideLabel;
+@property (nonatomic, strong) UILabel *largeBulletLabel;
+
 
 
 - (void)updateStreak:(NSInteger)streak;
+- (void)bulletFired;
 @end

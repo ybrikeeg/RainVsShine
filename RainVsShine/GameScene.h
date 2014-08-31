@@ -9,6 +9,6 @@
 #import <SpriteKit/SpriteKit.h>
 #import "StreakEngive.h"
 
-@interface GameScene : SKScene <SKPhysicsContactDelegate, StreakEngineDelegate>
 
+@interface GameScene : SKScene <SKPhysicsContactDelegate, StreakEngineDelegate>
 @end

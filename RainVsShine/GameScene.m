@@ -36,6 +36,13 @@
 @property (nonatomic, strong) StreakEngive *streakEngine;
 @property (nonatomic, strong) Guide *guide;
 @property (nonatomic) BOOL guideOn;
+@property (nonatomic) BOOL largeBulletOn;
+
+
+//debug
+@property (nonatomic, strong) UILabel *guideTimeLabel;
+@property (nonatomic, strong) UILabel *largeBulletLabel;
+
 @end
 
 @implementation GameScene
@@ -61,11 +68,16 @@
       self.streakEngine = [[StreakEngive alloc] init];
       self.streakEngine.delegate = self;
       self.guideOn = NO;
+      self.largeBulletOn = NO;
    }
    return self;
 }
 
-- (void) didMoveToView:(SKView *)view
+/*
+ *    Called before the scene is pushed onto the screen.
+ *    Used to set up UI elements
+ */
+- (void)didMoveToView:(SKView *)view
 {
    UISwitch *ai = [[UISwitch alloc] init];
    ai.center = CGPointMake(self.view.frame.size.width/2, ai.frame.size.height/2);
@@ -75,8 +87,16 @@
    
    self.streakLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, ai.frame.size.height/2, 40, 20)];
    [self.view addSubview:self.streakLabel];
+   
+   self.guideTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 40, 40, 20)];
+   [self.view addSubview:self.guideTimeLabel];
+   self.streakEngine.guideLabel = self.guideTimeLabel;
+   
+   self.largeBulletLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 60, 40, 20)];
+   self.largeBulletLabel.text = @"!";
+   [self.view addSubview:self.largeBulletLabel];
+   self.streakEngine.largeBulletLabel = self.largeBulletLabel;
 }
-
 
 
 - (void)toggle:(UISwitch *)theSwitch
@@ -91,6 +111,10 @@
 
 }
 
+/*
+ *    Creates all HUD elements (play/pause button, hud image
+ *    lives, score label)
+ */
 - (void)createHUD
 {
    SKSpriteNode *hudSprite = [SKSpriteNode spriteNodeWithImageNamed:@"hud"];
@@ -255,11 +279,16 @@
 
 #pragma mark - Streak Engine
 
+- (void)largeBulletChangedToState:(BOOL)active
+{
+   _largeBulletOn = active;
+}
+
 /*
  *    Delegate method of the StreakEngine. Updates the guideOn 
  *    bool and if it changes state, the setter removes/adds the guide
  */
-- (void)guideChangedState:(BOOL)active
+- (void)guideChangedToState:(BOOL)active
 {
    self.guideOn = active;
 }
@@ -301,6 +330,7 @@
  *    the guides x coordinate to be the same as the suns
  */
 -(void)update:(CFTimeInterval)currentTime {
+   
    /* Called before each frame is rendered */
    
    if (_guideOn){
@@ -339,6 +369,7 @@
          
          CGFloat duration =  (self.aiToggle) ? 0.05f : arc4random()%80 / (float)50;
          [self.sunPlayer runAction:[SKAction sequence:@[[SKAction moveToX:rain.position.x duration:0.06f], [SKAction waitForDuration:duration]]] completion:^{
+            [self.streakEngine bulletFired];
             [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
             
          }];
@@ -377,6 +408,8 @@
       [button runAction:wait];
       NSLog(@"texture2: %@", button.texture);
    } else{
+      [self.streakEngine bulletFired];
+
       [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
    }
 }
@@ -389,7 +422,9 @@
  */
 - (void)createBulletWithImpulse:(CGVector)impulse position:(CGPoint)pos categoryBitMask:(uint32_t)mask alreadyHitCloud:(BOOL)alreadyHitCloud identifier:(NSUInteger)identifier
 {
-   Bullet *bullet = [[Bullet alloc] init];
+   BulletType bulletType = (_largeBulletOn)? kBulletLarge : kBulletNormal;
+   
+   Bullet *bullet = [[Bullet alloc] initWithBulletType:bulletType];
    bullet.position = pos;
    
    bullet.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:bullet.frame.size];

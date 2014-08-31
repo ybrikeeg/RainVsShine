@@ -11,7 +11,7 @@
 
 @implementation Rain
 
--(id) initWithStyle:(RainStyle)type{
+- (id)initWithStyle:(RainStyle)type{
    if(self = [super init]) {
       if (type == kRainStyleNormal){
          _health = 1;
