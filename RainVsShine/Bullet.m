@@ -11,7 +11,8 @@
 @implementation Bullet
 - (id)initWithBulletType:(BulletType)type
 {
-   if (self = [super init]) {
+   self = [super init];
+   if (self) {
       self = [Bullet spriteNodeWithImageNamed:@"bullet"];
       self.damage = (type == kBulletNormal) ? 1 : 2;
       self.alreadyHitCloud = NO;

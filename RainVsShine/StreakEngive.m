@@ -30,13 +30,6 @@
    return self;
 }
 
-- (void)bulletFired
-{
-   if (self.largeBulletsLeft > 0){
-      --self.largeBulletsLeft;
-      self.largeBulletLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.largeBulletsLeft];
-   }
-}
 
 /*
  *    Called every second to update streak variables that control
@@ -57,6 +50,8 @@
    if (_largeBulletsLeft == 0){
       [self.delegate largeBulletChangedToState:NO];
    }
+   
+   self.largeBulletLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)_largeBulletsLeft];
 }
 
 /*
@@ -72,6 +67,16 @@
    }
 }
 
+#pragma mark - Called from GameScene
+/*
+ *    Called every time a bullet is fired
+ */
+- (void)bulletFired
+{
+   if (self.largeBulletsLeft > 0){
+      --self.largeBulletsLeft;
+   }
+}
 /*
  *    Called by the game scene to update the engine on the
  *    current streak. The engine runs its analysis and sends

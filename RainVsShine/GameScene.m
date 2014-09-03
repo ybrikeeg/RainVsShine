@@ -32,6 +32,8 @@
 @property (nonatomic) NSUInteger bulletCount;
 @property (nonatomic, strong) UILabel *streakLabel;
 
+@property (nonatomic, strong) SKLabelNode *scoreLabel;
+@property (nonatomic) NSUInteger score;
 //streak
 @property (nonatomic, strong) StreakEngive *streakEngine;
 @property (nonatomic, strong) Guide *guide;
@@ -69,6 +71,7 @@
       self.streakEngine.delegate = self;
       self.guideOn = NO;
       self.largeBulletOn = NO;
+      self.score = 0;
    }
    return self;
 }
@@ -86,16 +89,25 @@
    [self.view addSubview:ai];
    
    self.streakLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, ai.frame.size.height/2, 40, 20)];
+   self.streakLabel.text = @"0";
    [self.view addSubview:self.streakLabel];
    
    self.guideTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 40, 40, 20)];
+   self.guideTimeLabel.text = @"0";
    [self.view addSubview:self.guideTimeLabel];
    self.streakEngine.guideLabel = self.guideTimeLabel;
    
    self.largeBulletLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 60, 40, 20)];
-   self.largeBulletLabel.text = @"!";
+   self.largeBulletLabel.text = @"0";
    [self.view addSubview:self.largeBulletLabel];
    self.streakEngine.largeBulletLabel = self.largeBulletLabel;
+   
+   
+   self.scoreLabel = [SKLabelNode labelNodeWithFontNamed:@"Arial"];
+   self.scoreLabel.text = [NSString stringWithFormat:@"0"];
+   self.scoreLabel.fontSize = 20;
+   self.scoreLabel.position = CGPointMake(160, self.view.frame.size.height - 60);
+   [self addChild: self.scoreLabel];
 }
 
 
@@ -108,7 +120,7 @@
    }
    
    self.sunPlayer.aiToggle = self.aiToggle;
-
+   
 }
 
 /*
@@ -120,7 +132,7 @@
    SKSpriteNode *hudSprite = [SKSpriteNode spriteNodeWithImageNamed:@"hud"];
    hudSprite.position = CGPointMake(self.frame.size.width/2, self.frame.size.height - hudSprite.frame.size.height/2);
    hudSprite.zPosition = 100;
-   [self addChild:hudSprite];
+   //[self addChild:hudSprite];
    
    //add life indicators
    for (int i = 0; i < 3; i ++){
@@ -133,7 +145,7 @@
       SKAction *scaleUp = [SKAction scaleTo:1.1f duration:1.0f];
       SKAction *sequence = [SKAction sequence:@[scaleUp, scaleDown]];
       SKAction *rotate = [SKAction rotateByAngle:M_PI duration:2.0f];
-
+      
       SKAction *repeat   = [SKAction repeatActionForever:[SKAction group:@[rotate, sequence]]];
       [lifeSun runAction:repeat];
       
@@ -189,16 +201,16 @@
    SKAction *cloudRepeat   = [SKAction repeatActionForever:cloudSequence];
    [self runAction:cloudRepeat];
    
-   SKAction *rainWait = [SKAction waitForDuration:(self.aiToggle) ? 0.07f : 1.0f];
+   SKAction *rainWait = [SKAction waitForDuration:(self.aiToggle) ? 0.1f : 1.0f];
    SKAction *rainPerformSelector = [SKAction performSelector:@selector(createRain) onTarget:self];
    SKAction *rainSequence = [SKAction sequence:@[rainPerformSelector, rainWait]];
    SKAction *rainRepeat   = [SKAction repeatActionForever:rainSequence];
    [self runAction:rainRepeat];
    
    if (!self.sunPlayer){
-   self.sunPlayer = [[Sun alloc] init];
-   self.sunPlayer.position = CGPointMake(self.frame.size.width/2, 0);
-   [self addChild:self.sunPlayer];
+      self.sunPlayer = [[Sun alloc] init];
+      self.sunPlayer.position = CGPointMake(self.frame.size.width/2, 0);
+      [self addChild:self.sunPlayer];
    }
 }
 
@@ -227,8 +239,10 @@
    cloud.physicsBody.affectedByGravity = NO;
    cloud.physicsBody.categoryBitMask = cloudHitCategory;
    cloud.physicsBody.contactTestBitMask = rainCategory | bulletCategory;
+   cloud.physicsBody.usesPreciseCollisionDetection = YES;
    cloud.physicsBody.collisionBitMask =  0;
    cloud.zPosition = 2.0f;
+
    [self addChild:cloud];
    
    SKAction *move = [SKAction moveToX:self.view.bounds.size.width + cloud.frame.size.width duration:arc4random()%100 / 100 + 3.0];
@@ -257,7 +271,8 @@
    } else{
       rain.health = 1;
    }
-   
+   rain.physicsBody.usesPreciseCollisionDetection = YES;
+
    return rain;
 }
 
@@ -285,7 +300,7 @@
 }
 
 /*
- *    Delegate method of the StreakEngine. Updates the guideOn 
+ *    Delegate method of the StreakEngine. Updates the guideOn
  *    bool and if it changes state, the setter removes/adds the guide
  */
 - (void)guideChangedToState:(BOOL)active
@@ -300,7 +315,7 @@
 - (void)setGuideOn:(BOOL)guideOn
 {
    _guideOn = guideOn;
-
+   
    if (guideOn){
       self.guide = [[Guide alloc] init];
       self.guide.position = CGPointMake(self.sunPlayer.position.x, self.view.frame.size.height/2);
@@ -322,6 +337,26 @@
    [self.streakEngine updateStreak:_streak];
 }
 
+- (void)createScoreLabel:(CGPoint)pos
+{
+   SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"Arial"];
+   label.text = [NSString stringWithFormat:@"%d", (int)pos.y];
+   label.fontSize = 20;
+   label.position = pos;
+   
+   [self addChild:label];
+   
+   _score += pos.y;
+   _scoreLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)_score];
+   SKAction *moveUp = [SKAction moveByX:0.0f y:50.0f duration:0.3f];
+   SKAction *fade = [SKAction fadeAlphaTo:0.0f duration:0.3f];
+   
+   SKAction *group = [SKAction group:@[moveUp, fade]];
+   
+   [label runAction:group completion:^{
+      [label removeFromParent];
+   }];
+}
 
 #pragma  mark - Game loop
 /*
@@ -368,7 +403,7 @@
          [rain runAction:repeat];
          
          CGFloat duration =  (self.aiToggle) ? 0.05f : arc4random()%80 / (float)50;
-         [self.sunPlayer runAction:[SKAction sequence:@[[SKAction moveToX:rain.position.x duration:0.06f], [SKAction waitForDuration:duration]]] completion:^{
+         [self.sunPlayer runAction:[SKAction sequence:@[[SKAction moveToX:rain.position.x duration:0.01f], [SKAction waitForDuration:duration]]] completion:^{
             [self.streakEngine bulletFired];
             [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
             
@@ -393,23 +428,18 @@
       SKSpriteNode *button = (SKSpriteNode *)node;
       button.name = @"playButton";
       button.texture = [SKTexture textureWithImageNamed:@"pauseButton"];
-      SKAction *wait = [SKAction runBlock:^{
-         self.scene.view.paused = YES;
-      }];
-      [button runAction:wait];
+      [self.scene setPaused:NO];
       NSLog(@"texture1: %@", button.texture);
+      
    } else if ([node.name isEqualToString:@"playButton"]) {
       SKSpriteNode *button = (SKSpriteNode *)node;
       button.name = @"pauseButton";
       button.texture = [SKTexture textureWithImageNamed:@"playButton"];
-      SKAction *wait = [SKAction runBlock:^{
-         self.scene.view.paused = NO;
-      }];
-      [button runAction:wait];
+      [self.scene setPaused:YES];
       NSLog(@"texture2: %@", button.texture);
+      
    } else{
       [self.streakEngine bulletFired];
-
       [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
    }
 }
@@ -480,12 +510,14 @@
                rain1.position = CGPointMake(cloud.position.x - 10, cloud.position.y);
                [self addChild:rain1];
                [rain1.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
-               
+               rain1.physicsBody.usesPreciseCollisionDetection = YES;
+
                Rain *rain2 = [self rainWithStyle:kRainStylePair];
                rain2.position = CGPointMake(cloud.position.x + 10, cloud.position.y);
                [self addChild:rain2];
                [rain2.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
-               
+               rain2.physicsBody.usesPreciseCollisionDetection = YES;
+
                if (self.aiToggle){
                   [self.rainArray insertObject:rain1 atIndex:0];
                   [self.rainArray insertObject:rain2 atIndex:0];
@@ -496,7 +528,8 @@
                rain.position = CGPointMake(cloud.position.x, cloud.position.y);
                [self addChild:rain];
                [rain.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
-               
+               rain.physicsBody.usesPreciseCollisionDetection = YES;
+
                if (self.aiToggle){
                   [self.rainArray insertObject:rain atIndex:0];
                }
@@ -506,7 +539,8 @@
                rain.position = CGPointMake(cloud.position.x, cloud.position.y);
                [self addChild:rain];
                [rain.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
-               
+               rain.physicsBody.usesPreciseCollisionDetection = YES;
+
                if (self.aiToggle){
                   [self.rainArray insertObject:rain atIndex:0];
                }
@@ -532,13 +566,17 @@
  */
 - (void)rain:(Rain *)rain collideWithBullet:(Bullet *)bullet
 {
+   //cant play with nil objects
+   if (!rain && !bullet) return;
    NSString *burstPath = [[NSBundle mainBundle] pathForResource:@"rainBulletCollision" ofType:@"sks"];
    SKEmitterNode *burstEmitter = [NSKeyedUnarchiver unarchiveObjectWithFile:burstPath];
-   burstEmitter.position = bullet.position;
+   burstEmitter.position = (rain) ? rain.position : bullet.position;
    [self addChild:burstEmitter];
    
    rain.health -= bullet.damage;
    if (rain.health <= 0){
+      [self createScoreLabel:rain.position];
+      
       self.streak++;
       [self removeRain:rain];
       if (self.aiToggle){
@@ -560,6 +598,7 @@
 {
    if (!bullet.alreadyHitCloud){
       bullet.alreadyHitCloud = YES;
+      //bullet.physicsBody.categoryBitMask = specialBulletCategory;
       [self createBulletWithImpulse:CGVectorMake(-10.0f, 30.0f) position:CGPointMake(bullet.position.x, bullet.position.y + 10) categoryBitMask:specialBulletCategory alreadyHitCloud:YES identifier:bullet.identifier];
       [self createBulletWithImpulse:CGVectorMake(10.0f, 30.0f) position:CGPointMake(bullet.position.x, bullet.position.y + 10) categoryBitMask:specialBulletCategory alreadyHitCloud:YES identifier:bullet.identifier];
    }
@@ -571,12 +610,11 @@
  */
 - (void)bullet:(Bullet *)bullet collideWithCeiling:(SKNode *)ceiling
 {
-   
    if (self.lastIdentifier == bullet.identifier){
       self.consecutive++;
    } else{
       self.consecutive = 0;
-      if (bullet.physicsBody.categoryBitMask == bulletCategory){
+      if (bullet.physicsBody.categoryBitMask == bulletCategory && bullet.alreadyHitCloud == NO){
          self.streak = 0;
       }
    }

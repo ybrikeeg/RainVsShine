@@ -12,7 +12,8 @@
 @implementation Rain
 
 - (id)initWithStyle:(RainStyle)type{
-   if(self = [super init]) {
+   self = [super init];
+   if(self) {
       if (type == kRainStyleNormal){
          _health = 1;
          self = [Rain spriteNodeWithImageNamed:@"rain"];

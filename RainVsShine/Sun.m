@@ -18,7 +18,8 @@
 
 -(id)init
 {
-   if (self = [super init]) {
+   self = [super init];
+   if (self) {
       self = [Sun spriteNodeWithImageNamed:@"sun"];
       self.screenSize = [UIScreen mainScreen].bounds.size;
       self.motionManager = [[CMMotionManager alloc] init];
