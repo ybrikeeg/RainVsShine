@@ -34,6 +34,8 @@
 
 @property (nonatomic, strong) SKLabelNode *scoreLabel;
 @property (nonatomic) NSUInteger score;
+@property (nonatomic) NSUInteger multiplier;
+
 //streak
 @property (nonatomic, strong) StreakEngive *streakEngine;
 @property (nonatomic, strong) Guide *guide;
@@ -57,25 +59,36 @@
       self.physicsWorld.gravity = CGVectorMake(0,-0.8);
       self.physicsWorld.speed = 1.0f;
       
-      self.streak = 0;
-      self.consecutive = 0;
-      self.bulletCount = 0;
+      [self initializeGameElements];
+      
+
       [self createHUD];
       [self initializeTheElements];
       [self createBoundaries];
       
-      self.aiToggle = USE_AUTO_FIRE;
-      self.rainArray = [[NSMutableArray alloc] init];
-      
-      self.streakEngine = [[StreakEngive alloc] init];
-      self.streakEngine.delegate = self;
-      self.guideOn = NO;
-      self.largeBulletOn = NO;
-      self.score = 0;
+
    }
    return self;
 }
 
+- (void)initializeGameElements
+{
+   self.aiToggle = USE_AUTO_FIRE;
+
+   self.rainArray = [[NSMutableArray alloc] init];
+   self.streakEngine = [[StreakEngive alloc] init];
+   self.streakEngine.delegate = self;
+   
+   self.streak = 0;
+   self.multiplier = 1;
+   self.score = 0;
+   self.consecutive = 0;
+   self.bulletCount = 0;
+
+   self.guideOn = NO;
+   self.largeBulletOn = NO;
+   
+}
 /*
  *    Called before the scene is pushed onto the screen.
  *    Used to set up UI elements
@@ -242,6 +255,7 @@
    cloud.physicsBody.usesPreciseCollisionDetection = YES;
    cloud.physicsBody.collisionBitMask =  0;
    cloud.zPosition = 2.0f;
+   cloud.anchorPoint = CGPointMake(0, 1);
 
    [self addChild:cloud];
    
@@ -294,6 +308,12 @@
 
 #pragma mark - Streak Engine
 
+- (void)multiplierChangedToValue:(NSUInteger)multiplier
+{
+   self.multiplier = multiplier;
+   NSLog(@"Multi: %d", self.multiplier);
+}
+
 - (void)largeBulletChangedToState:(BOOL)active
 {
    _largeBulletOn = active;
@@ -340,14 +360,22 @@
 - (void)createScoreLabel:(CGPoint)pos
 {
    SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"Arial"];
-   label.text = [NSString stringWithFormat:@"%d", (int)pos.y];
+   NSString *scoreLabelString;
+   if (self.multiplier > 1){
+      scoreLabelString = [NSString stringWithFormat:@"%dx%d", (int)pos.y, (int)self.multiplier];
+   }else{
+      scoreLabelString = [NSString stringWithFormat:@"%d", (int)pos.y];
+   }
+   label.text = scoreLabelString;
    label.fontSize = 20;
    label.position = pos;
    
    [self addChild:label];
    
-   _score += pos.y;
-   _scoreLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)_score];
+
+   _score += pos.y * self.multiplier;
+   _scoreLabel.text = [NSString stringWithFormat:@"%d", (int)self.score];
+   
    SKAction *moveUp = [SKAction moveByX:0.0f y:50.0f duration:0.3f];
    SKAction *fade = [SKAction fadeAlphaTo:0.0f duration:0.3f];
    
@@ -402,10 +430,10 @@
          SKAction *repeat   = [SKAction repeatActionForever:sequence];
          [rain runAction:repeat];
          
-         CGFloat duration =  (self.aiToggle) ? 0.05f : arc4random()%80 / (float)50;
-         [self.sunPlayer runAction:[SKAction sequence:@[[SKAction moveToX:rain.position.x duration:0.01f], [SKAction waitForDuration:duration]]] completion:^{
-            [self.streakEngine bulletFired];
-            [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
+         CGFloat duration =  (self.aiToggle) ? 0.1f : arc4random()%80 / (float)50;
+         [self.sunPlayer runAction:[SKAction sequence:@[[SKAction moveToX:rain.position.x duration:0.2f], [SKAction waitForDuration:duration]]] completion:^{
+            //[self.streakEngine bulletFired];
+            //[self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
             
          }];
       }
@@ -473,7 +501,7 @@
 }
 
 #pragma mark - Collision code
-
+#define SPECIAL_RAIN_Y_OFFSET -5
 /*
  *    Method creates special rain when rain hits cloud and changes
  *    the appropriate bit masks
@@ -491,33 +519,46 @@
          //action to move drop to center of cloud
          cloud.physicsBody.contactTestBitMask = bulletCategory;
          
-         SKAction *move = [SKAction moveTo:cloud.position duration:0.1f];
-         SKAction *shrink = [SKAction scaleBy:0.3f duration:0.1f];
+         SKAction *move = [SKAction moveTo:CGPointMake(cloud.position.x + cloud.size.width, cloud.position.y) duration:0.1f];
+         SKAction *shrink = [SKAction scaleBy:0.2f duration:0.1f];
          SKAction *group = [SKAction group:@[move, shrink]];
          SKAction *remove = [SKAction runBlock:^{
             [self removeRain:drop];
          }];
+
+         [cloud startAnimating];
+
          
          [drop runAction:[SKAction sequence:@[group, remove]]];
          
-         SKAction *wait = [SKAction waitForDuration:0.5f];
+         SKAction *wait = [SKAction waitForDuration:0.85f];
          SKAction *create = [SKAction runBlock:^{
             int specialRain = arc4random()%3;
             
             if (specialRain == 0){
                //double rain
                Rain *rain1 = [self rainWithStyle:kRainStylePair];
-               rain1.position = CGPointMake(cloud.position.x - 10, cloud.position.y);
+               rain1.position = CGPointMake(cloud.position.x + 30, cloud.position.y + SPECIAL_RAIN_Y_OFFSET);
                [self addChild:rain1];
                [rain1.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
                rain1.physicsBody.usesPreciseCollisionDetection = YES;
 
                Rain *rain2 = [self rainWithStyle:kRainStylePair];
-               rain2.position = CGPointMake(cloud.position.x + 10, cloud.position.y);
+               rain2.position = CGPointMake(cloud.position.x + 50, cloud.position.y + SPECIAL_RAIN_Y_OFFSET);
                [self addChild:rain2];
                [rain2.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
                rain2.physicsBody.usesPreciseCollisionDetection = YES;
 
+               
+               SKAction *move1 = [SKAction moveByX:60 y:0 duration:0.8f];
+               move1.timingMode = SKActionTimingEaseOut;
+               [rain1 runAction:move1];
+               
+               SKAction *move2 = [SKAction moveByX:60 y:0 duration:0.8f];
+               move2.timingMode = SKActionTimingEaseOut;
+               [rain2 runAction:move2];
+
+               
                if (self.aiToggle){
                   [self.rainArray insertObject:rain1 atIndex:0];
                   [self.rainArray insertObject:rain2 atIndex:0];
@@ -525,22 +566,26 @@
             } else if (specialRain == 1){
                //large rain
                Rain *rain = [self rainWithStyle:kRainStyleLarge];
-               rain.position = CGPointMake(cloud.position.x, cloud.position.y);
+               rain.position = CGPointMake(cloud.position.x + 30, cloud.position.y + SPECIAL_RAIN_Y_OFFSET);
                [self addChild:rain];
                [rain.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
                rain.physicsBody.usesPreciseCollisionDetection = YES;
-
+               
+               SKAction *move = [SKAction moveByX:60 y:0 duration:0.8f];
+               move.timingMode = SKActionTimingEaseOut;
+               [rain runAction:move];
+               
                if (self.aiToggle){
                   [self.rainArray insertObject:rain atIndex:0];
                }
             } else if (specialRain == 2){
                //evasive rain
                Rain *rain = [self rainWithStyle:kRainStyleEvasive];
-               rain.position = CGPointMake(cloud.position.x, cloud.position.y);
+               rain.position = CGPointMake(cloud.position.x + 30, cloud.position.y + SPECIAL_RAIN_Y_OFFSET);
                [self addChild:rain];
                [rain.physicsBody applyImpulse:CGVectorMake(0.0, -1.0)];
                rain.physicsBody.usesPreciseCollisionDetection = YES;
-
+               
                if (self.aiToggle){
                   [self.rainArray insertObject:rain atIndex:0];
                }
@@ -551,7 +596,6 @@
          [self runAction:[SKAction sequence:@[wait, create]] completion:^{
             cloud.physicsBody.contactTestBitMask = rainCategory;
             cloud.physicsBody.categoryBitMask = cloudHitCategory;
-            
          }];
       }
    } else if (drop.alreadyHitCloud){
@@ -575,10 +619,11 @@
    
    rain.health -= bullet.damage;
    if (rain.health <= 0){
-      [self createScoreLabel:rain.position];
-      
       self.streak++;
+
+      [self createScoreLabel:rain.position];
       [self removeRain:rain];
+      
       if (self.aiToggle){
          if ([_rainArray containsObject:rain]){
             [self.rainArray removeObject:rain];

@@ -10,4 +10,8 @@
 
 @interface Cloud : SKSpriteNode
 
+@property (nonatomic) BOOL isAnimating;
+
+- (void)startAnimating;
+
 @end

@@ -85,12 +85,20 @@
  */
 - (void)updateStreak:(NSInteger)streak
 {
-   if (streak == 10){//turn guide on for 10 seconds
+   
+   if (streak == 0){
+      [self.delegate multiplierChangedToValue:1];
+   } else if (streak == 5){
+      [self.delegate multiplierChangedToValue:2];
+   } else if (streak == 10){
+      [self.delegate multiplierChangedToValue:3];
+   }
+   if (streak == 20){//turn guide on for 10 seconds
       if (self.guideTimeLeft == 0){
          [self.delegate guideChangedToState:YES];
       }
       self.guideTimeLeft += 10;
-   } else if (streak == 2){//large bullet (5 shots)
+   } else if (streak == 10){//large bullet (5 shots)
       if (self.largeBulletsLeft == 0){
          [self.delegate largeBulletChangedToState:YES];
       }

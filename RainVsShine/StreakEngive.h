@@ -14,6 +14,7 @@
 @required
 - (void)guideChangedToState:(BOOL)active;
 - (void)largeBulletChangedToState:(BOOL)active;
+- (void)multiplierChangedToValue:(NSUInteger)multiplier;
 @end
 
 @interface StreakEngive : NSObject
