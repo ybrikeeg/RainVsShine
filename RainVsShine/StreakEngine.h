@@ -17,7 +17,7 @@
 - (void)multiplierChangedToValue:(NSUInteger)multiplier;
 @end
 
-@interface StreakEngive : NSObject
+@interface StreakEngine : NSObject
 
 @property (nonatomic, weak) id <StreakEngineDelegate> delegate;
 @property (nonatomic, strong) UILabel *guideLabel;

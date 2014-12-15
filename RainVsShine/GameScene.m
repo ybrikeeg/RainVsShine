@@ -7,7 +7,7 @@
 //
 
 #import "GameScene.h"
-#import "StreakEngive.h"
+#import "StreakEngine.h"
 #import "Rain.h"
 #import "Constants.h"
 #import "Sun.h"
@@ -37,7 +37,7 @@
 @property (nonatomic) NSUInteger multiplier;
 
 //streak
-@property (nonatomic, strong) StreakEngive *streakEngine;
+@property (nonatomic, strong) StreakEngine *streakEngine;
 @property (nonatomic, strong) Guide *guide;
 @property (nonatomic) BOOL guideOn;
 @property (nonatomic) BOOL largeBulletOn;
@@ -76,7 +76,7 @@
    self.aiToggle = USE_AUTO_FIRE;
 
    self.rainArray = [[NSMutableArray alloc] init];
-   self.streakEngine = [[StreakEngive alloc] init];
+   self.streakEngine = [[StreakEngine alloc] init];
    self.streakEngine.delegate = self;
    
    self.streak = 0;
@@ -133,7 +133,6 @@
    }
    
    self.sunPlayer.aiToggle = self.aiToggle;
-   
 }
 
 /*
@@ -145,7 +144,7 @@
    SKSpriteNode *hudSprite = [SKSpriteNode spriteNodeWithImageNamed:@"hud"];
    hudSprite.position = CGPointMake(self.frame.size.width/2, self.frame.size.height - hudSprite.frame.size.height/2);
    hudSprite.zPosition = 100;
-   //[self addChild:hudSprite];
+   [self addChild:hudSprite];
    
    //add life indicators
    for (int i = 0; i < 3; i ++){
@@ -212,7 +211,7 @@
    SKAction *cloudPerformSelector = [SKAction performSelector:@selector(createCloud) onTarget:self];
    SKAction *cloudSequence = [SKAction sequence:@[cloudPerformSelector, cloudWait]];
    SKAction *cloudRepeat   = [SKAction repeatActionForever:cloudSequence];
-   [self runAction:cloudRepeat];
+   //[self runAction:cloudRepeat];
    
    SKAction *rainWait = [SKAction waitForDuration:(self.aiToggle) ? 0.1f : 1.0f];
    SKAction *rainPerformSelector = [SKAction performSelector:@selector(createRain) onTarget:self];
@@ -311,7 +310,7 @@
 - (void)multiplierChangedToValue:(NSUInteger)multiplier
 {
    self.multiplier = multiplier;
-   NSLog(@"Multi: %d", self.multiplier);
+   NSLog(@"Multi: %lu", (unsigned long)self.multiplier);
 }
 
 - (void)largeBulletChangedToState:(BOOL)active
@@ -357,6 +356,7 @@
    [self.streakEngine updateStreak:_streak];
 }
 
+
 - (void)createScoreLabel:(CGPoint)pos
 {
    SKLabelNode *label = [SKLabelNode labelNodeWithFontNamed:@"Arial"];
@@ -372,9 +372,30 @@
    
    [self addChild:label];
    
-
-   _score += pos.y * self.multiplier;
-   _scoreLabel.text = [NSString stringWithFormat:@"%d", (int)self.score];
+   int updateCount = 15;
+   int scoreToAdd = pos.y * self.multiplier;
+   
+   __block int pointsAdded = 0;
+   __block int pointIncrement = scoreToAdd / (updateCount-1);
+   __block int remainder = scoreToAdd % pointIncrement;
+   
+   NSLog(@"ScoretoAdd: %d Increment: %d Remainder: %d", scoreToAdd, pointIncrement, remainder);
+   SKAction *wait = [SKAction waitForDuration:0.02];
+   SKAction *block = [SKAction runBlock:^{
+      if (pointsAdded == (pointIncrement * (updateCount - 1))){
+         _score += remainder;
+      }else{
+         _score += pointIncrement;
+         pointsAdded += pointIncrement;
+      }
+      _scoreLabel.text = [NSString stringWithFormat:@"%d", (int)self.score];
+   }];
+   SKAction *sequence = [SKAction sequence:@[block, wait]];
+   SKAction *repeat   = [SKAction repeatAction:sequence count:updateCount];//10 * .1 = 1 second
+   [self runAction:repeat];
+   
+   //_score += pos.y * self.multiplier;
+   //_scoreLabel.text = [NSString stringWithFormat:@"%d", (int)self.score];
    
    SKAction *moveUp = [SKAction moveByX:0.0f y:50.0f duration:0.3f];
    SKAction *fade = [SKAction fadeAlphaTo:0.0f duration:0.3f];
@@ -403,14 +424,16 @@
    if (self.aiToggle){
       if ([self.rainArray count] > 0 && !self.sunPlayer.hasActions){
          
-         int x = 0;
-         Rain *rain = [self.rainArray objectAtIndex:x];
-         while (rain.position.y < 0) {
-            [self.rainArray removeObject:rain];
-            rain = [self.rainArray objectAtIndex:x];
-            x++;
-         }
-         for (int i = 1; i < [self.rainArray count]; i++){
+//         int x = 0;
+         Rain *rain;// = [self.rainArray objectAtIndex:x];
+//         while (rain.position.y < 0) {
+//            [self.rainArray removeObject:rain];
+//            rain = [self.rainArray objectAtIndex:x];
+//            x++;
+//         }
+         
+         /*
+         for (int i = 0; i < [self.rainArray count]; i++){
             Rain *currRain = [self.rainArray objectAtIndex:i];
             if (currRain.position.y < 0){
                [self.rainArray removeObject:currRain];
@@ -419,7 +442,11 @@
                rain = currRain;
             }
          }
-         
+          */
+         rain = [self.rainArray firstObject];
+         if (rain.position.y < 300){
+            
+         //remove it to prevent loop from firing multiple bullets
          if (rain.health < 2){
             [self.rainArray removeObject:rain];
          }
@@ -431,11 +458,13 @@
          [rain runAction:repeat];
          
          CGFloat duration =  (self.aiToggle) ? 0.1f : arc4random()%80 / (float)50;
-         [self.sunPlayer runAction:[SKAction sequence:@[[SKAction moveToX:rain.position.x duration:0.2f], [SKAction waitForDuration:duration]]] completion:^{
-            //[self.streakEngine bulletFired];
-            //[self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
+         duration = 0.05f;
+         [self.sunPlayer runAction:[SKAction sequence:@[[SKAction moveToX:rain.position.x duration:0.05f], [SKAction waitForDuration:duration]]] completion:^{
+            [self.streakEngine bulletFired];
+            [self createBulletWithImpulse:CGVectorMake(0.0f, 30.0f) position:self.sunPlayer.position categoryBitMask:bulletCategory alreadyHitCloud:NO identifier:self.bulletCount++];
             
          }];
+         }
       }
    }
 }

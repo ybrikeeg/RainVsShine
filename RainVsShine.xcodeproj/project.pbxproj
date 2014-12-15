@@ -23,7 +23,7 @@
 		420E77BE199EE1DF00DEBBD0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 420E7799199EE1DF00DEBBD0 /* UIKit.framework */; };
 		420E77C6199EE1DF00DEBBD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 420E77C4199EE1DF00DEBBD0 /* InfoPlist.strings */; };
 		420E77C8199EE1DF00DEBBD0 /* RainVsShineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 420E77C7199EE1DF00DEBBD0 /* RainVsShineTests.m */; };
-		422049F319B1634700222D4C /* StreakEngive.m in Sources */ = {isa = PBXBuildFile; fileRef = 422049F219B1634700222D4C /* StreakEngive.m */; };
+		422049F319B1634700222D4C /* StreakEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 422049F219B1634700222D4C /* StreakEngine.m */; };
 		423274AF19A1C85B0033CDD5 /* Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 423274AE19A1C85B0033CDD5 /* Cloud.m */; };
 		42327A7619A96562005492B7 /* Bullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 42327A7519A96562005492B7 /* Bullet.m */; };
 		423C889719A9A7EC008D13DD /* rainBulletCollision.sks in Resources */ = {isa = PBXBuildFile; fileRef = 423C889519A9A7EC008D13DD /* rainBulletCollision.sks */; };
@@ -69,8 +69,8 @@
 		420E77C3199EE1DF00DEBBD0 /* RainVsShineTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RainVsShineTests-Info.plist"; sourceTree = "<group>"; };
 		420E77C5199EE1DF00DEBBD0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		420E77C7199EE1DF00DEBBD0 /* RainVsShineTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RainVsShineTests.m; sourceTree = "<group>"; };
-		422049F119B1634700222D4C /* StreakEngive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreakEngive.h; sourceTree = "<group>"; };
-		422049F219B1634700222D4C /* StreakEngive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreakEngive.m; sourceTree = "<group>"; };
+		422049F119B1634700222D4C /* StreakEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreakEngine.h; sourceTree = "<group>"; };
+		422049F219B1634700222D4C /* StreakEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreakEngine.m; sourceTree = "<group>"; };
 		423274AD19A1C85B0033CDD5 /* Cloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cloud.h; sourceTree = "<group>"; };
 		423274AE19A1C85B0033CDD5 /* Cloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cloud.m; sourceTree = "<group>"; };
 		42327A7419A96562005492B7 /* Bullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bullet.h; sourceTree = "<group>"; };
@@ -152,8 +152,8 @@
 			children = (
 				42DCE808199FD95C00F3568E /* Constants.h */,
 				420E77A9199EE1DF00DEBBD0 /* Main.storyboard */,
-				422049F119B1634700222D4C /* StreakEngive.h */,
-				422049F219B1634700222D4C /* StreakEngive.m */,
+				422049F119B1634700222D4C /* StreakEngine.h */,
+				422049F219B1634700222D4C /* StreakEngine.m */,
 				420E77AF199EE1DF00DEBBD0 /* GameScene.h */,
 				420E77B0199EE1DF00DEBBD0 /* GameScene.m */,
 				42DA6E3A19AA87270088C13C /* ParticleEmitters */,
@@ -336,7 +336,7 @@
 				420E77B1199EE1DF00DEBBD0 /* GameScene.m in Sources */,
 				425F264E19A91B8000CBF677 /* Sun.m in Sources */,
 				420E77A4199EE1DF00DEBBD0 /* main.m in Sources */,
-				422049F319B1634700222D4C /* StreakEngive.m in Sources */,
+				422049F319B1634700222D4C /* StreakEngine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 Kirby Gee - Stanford Univeristy. All rights reserved.
 //
 
-#import "StreakEngive.h"
+#import "StreakEngine.h"
 
-@interface StreakEngive ()
+@interface StreakEngine ()
 @property (nonatomic, strong) NSTimer *update;
 @property (nonatomic) NSUInteger guideTimeLeft;
 @property (nonatomic) NSUInteger largeBulletsLeft;
 @end
 
 
-@implementation StreakEngive
+@implementation StreakEngine
 
 
 - (id)init
@@ -77,6 +77,7 @@
       --self.largeBulletsLeft;
    }
 }
+
 /*
  *    Called by the game scene to update the engine on the
  *    current streak. The engine runs its analysis and sends
@@ -85,24 +86,22 @@
  */
 - (void)updateStreak:(NSInteger)streak
 {
-   
    if (streak == 0){
       [self.delegate multiplierChangedToValue:1];
    } else if (streak == 5){
       [self.delegate multiplierChangedToValue:2];
    } else if (streak == 10){
       [self.delegate multiplierChangedToValue:3];
-   }
-   if (streak == 20){//turn guide on for 10 seconds
-      if (self.guideTimeLeft == 0){
-         [self.delegate guideChangedToState:YES];
-      }
-      self.guideTimeLeft += 10;
-   } else if (streak == 10){//large bullet (5 shots)
       if (self.largeBulletsLeft == 0){
          [self.delegate largeBulletChangedToState:YES];
       }
       self.largeBulletsLeft += 5;
+   }else if (streak == 20){//turn guide on for 10 seconds
+      if (self.guideTimeLeft == 0){
+         [self.delegate guideChangedToState:YES];
+      }
+      self.guideTimeLeft += 10;
+      [self.delegate multiplierChangedToValue:4];
    }
 }
 

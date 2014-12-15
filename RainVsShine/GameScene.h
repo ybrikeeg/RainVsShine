@@ -7,7 +7,7 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
-#import "StreakEngive.h"
+#import "StreakEngine.h"
 
 
 @interface GameScene : SKScene <SKPhysicsContactDelegate, StreakEngineDelegate>
